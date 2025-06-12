@@ -1,0 +1,25 @@
+.campaign-list {
+  padding: 1rem;
+}
+
+.campaign-list h2 {
+  margin: 0 0 1rem 0;
+}
+
+.campaign-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.campaign-list li {
+  margin: 0.5rem 0;
+}
+
+.campaign-list button {
+  margin-top: 1rem;
+}
+
+.campaign-list .error {
+  color: red;
+  margin-top: 1rem;
+}

@@ -1,1 +1,15 @@
-<p>donation-form works!</p>
+<h2>Effettua Donazione</h2>
+<form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
+  <label>Nome (opzionale):
+    <input formControlName="donor_name" />
+  </label>
+  <br>
+  <label>Importo (€):
+    <input type="number" formControlName="amount" />
+  </label>
+  <br>
+  <button type="submit" [disabled]="donationForm.invalid">Dona</button>
+</form>
+<div *ngIf="errorMessage" class="error">
+  {{ errorMessage }}
+</div>

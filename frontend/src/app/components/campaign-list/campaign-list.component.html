@@ -1,1 +1,10 @@
-<p>campaign-list works!</p>
+<h2>Elenco Campagne</h2>
+<ul>
+  <li *ngFor="let c of campaigns">
+    <a [routerLink]="['/campaigns', c.id]">{{ c.title }} - Racc. {{ c.collected }}/{{ c.goal }}€</a>
+  </li>
+</ul>
+<button (click)="createCampaign()">Crea Nuova Campagna</button>
+<div *ngIf="errorMessage" class="error">
+  {{ errorMessage }}
+</div>

@@ -1,1 +1,11 @@
-<p>home works!</p>
+<h1>Benvenuto su Donaction</h1>
+<p>Scopri le campagne di raccolta fondi e dona ora.</p>
+<div class="campaigns">
+  <h2>Campagne in evidenza</h2>
+  <div class="campaign" *ngFor="let campaign of campaigns">
+    <h3>{{ campaign.title }}</h3>
+    <p>{{ campaign.description }}</p>
+    <p>Obiettivo: {{ campaign.goal | currency }}</p>
+    <button (click)="donate(campaign.id)">Dona ora</button>
+  </div>
+</div>

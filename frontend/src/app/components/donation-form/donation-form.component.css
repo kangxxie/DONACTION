@@ -1,0 +1,17 @@
+.donation-form {
+  padding: 1rem;
+}
+
+.donation-form h2 {
+  margin: 0 0 1rem 0;
+}
+
+.donation-form label {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.donation-form .error {
+  color: red;
+  margin-top: 1rem;
+}

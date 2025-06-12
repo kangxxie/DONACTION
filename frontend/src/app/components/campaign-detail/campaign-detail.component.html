@@ -1,1 +1,10 @@
-<p>campaign-detail works!</p>
+<div *ngIf="campaign">
+  <h2>{{ campaign.title }}</h2>
+  <p>{{ campaign.description }}</p>
+  <p>Obiettivo: {{ campaign.goal }}€</p>
+  <p>Raccolto: {{ campaign.collected }}€</p>
+  <button (click)="goToDonate()">Dona ora</button>
+</div>
+<div *ngIf="!campaign">
+  <p>Caricamento campagna...</p>
+</div>

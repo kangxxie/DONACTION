@@ -5,7 +5,7 @@ import { CampaignListComponent } from './components/campaign-list/campaign-list.
 import { CampaignDetailComponent } from './components/campaign-detail/campaign-detail.component';
 import { DonationFormComponent } from './components/donation-form/donation-form.component';
 
-export const appRoutes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'campaigns', component: CampaignListComponent },
   { path: 'campaigns/:id', component: CampaignDetailComponent },

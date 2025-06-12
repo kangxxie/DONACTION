@@ -1,0 +1,20 @@
+.campaign-detail {
+  padding: 1rem;
+}
+
+.campaign-detail h2 {
+  margin: 0 0 1rem 0;
+}
+
+.campaign-detail p {
+  margin: 0.5rem 0;
+}
+
+.campaign-detail button {
+  margin-top: 1rem;
+}
+
+.campaign-detail .error {
+  color: red;
+  margin-top: 1rem;
+}

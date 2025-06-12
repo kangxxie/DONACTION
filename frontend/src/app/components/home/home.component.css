@@ -1,0 +1,36 @@
+.campaigns {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.campaign {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.campaign h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.campaign p {
+  margin: 0.5rem 0;
+}
+
+.campaign button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.campaign button:hover {
+  background-color: #218838;
+}
+.campaign button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
