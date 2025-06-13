@@ -5,5 +5,5 @@ export interface Campaign {
   description: string;
   goal: number;
   collected: number;
-  created_at: string;
+  imageUrl?: string; // Aggiunta questa proprietà con "?" per renderla opzionale
 }

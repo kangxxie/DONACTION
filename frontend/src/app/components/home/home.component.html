@@ -1,11 +1,73 @@
-<h1>Benvenuto su Donaction</h1>
-<p>Scopri le campagne di raccolta fondi e dona ora.</p>
-<div class="campaigns">
-  <h2>Campagne in evidenza</h2>
-  <div class="campaign" *ngFor="let campaign of campaigns">
-    <h3>{{ campaign.title }}</h3>
-    <p>{{ campaign.description }}</p>
-    <p>Obiettivo: {{ campaign.goal | currency }}</p>
-    <button (click)="donate(campaign.id)">Dona ora</button>
+<div class="hero-section">
+  <div class="hero-content">
+    <h1>Cambia vite con Donaction</h1>
+    <p class="hero-text">Unisciti a migliaia di persone che stanno facendo la differenza attraverso donazioni che trasformano comunità.</p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary">Dona Ora</button>
+      <button class="btn btn-outline">Scopri di Più</button>
+    </div>
   </div>
 </div>
+
+<section class="featured-campaigns">
+  <h2 class="section-title">Campagne in Evidenza</h2>
+  <p class="section-description">Sostieni i progetti che stanno facendo la differenza proprio ora</p>
+  
+  <div class="campaign-grid">
+    <div *ngFor="let campaign of campaigns" class="campaign-card">
+      <div class="campaign-image">
+      <img [src]="campaign.imageUrl || 'assets/images/default-campaign.jpg'" alt="{{campaign.title}}">
+      </div>
+      <div class="campaign-content">
+        <h3>{{ campaign.title }}</h3>
+        <p class="campaign-description">{{ campaign.description | slice:0:100 }}...</p>
+        <div class="campaign-progress">
+          <div class="progress-bar">
+            <div class="progress" [style.width]="(campaign.collected / campaign.goal * 100) + '%'"></div>
+          </div>
+          <div class="progress-stats">
+            <span class="collected">{{ campaign.collected | currency:'EUR' }}</span>
+            <span class="goal">di {{ campaign.goal | currency:'EUR' }}</span>
+          </div>
+        </div>
+        <button (click)="donate(campaign.id)" class="btn btn-secondary">Dona Ora</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-it-works">
+  <h2 class="section-title">Come Funziona</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-icon">1</div>
+      <h3>Scegli una causa</h3>
+      <p>Trova una campagna che risuona con i tuoi valori e desideri di fare la differenza.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">2</div>
+      <h3>Fai una donazione</h3>
+      <p>Dona in modo sicuro qualsiasi importo tu desideri per sostenere la causa scelta.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">3</div>
+      <h3>Crea impatto</h3>
+      <p>Ricevi aggiornamenti sul progresso e sull'impatto della tua donazione.</p>
+    </div>
+  </div>
+</section>
+
+<section class="impact-stats">
+  <div class="stat">
+    <div class="stat-number">150+</div>
+    <div class="stat-text">Campagne Finanziate</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">€500K+</div>
+    <div class="stat-text">Fondi Raccolti</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">10K+</div>
+    <div class="stat-text">Donatori</div>
+  </div>
+</section>
