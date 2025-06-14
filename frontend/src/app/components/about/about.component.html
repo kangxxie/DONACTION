@@ -1,0 +1,181 @@
+<!-- Hero Section -->
+<div class="hero-section" @heroAnimation>
+  <div class="hero-content container">
+    <h1 class="animated-title">Chi Siamo</h1>
+    <p class="animated-subtitle">Scopri la storia, la missione e le persone dietro DONACTION</p>
+  </div>
+</div>
+
+<!-- Mission Section -->
+<section class="mission-section" @missionAnimation>
+  <div class="container">
+    <div class="mission-content">
+      <div class="mission-text">
+        <h2>La Nostra Missione</h2>
+        <p class="lead">Crediamo che insieme possiamo cambiare il mondo, un'azione alla volta.</p>
+        <p>DONACTION nasce nel 2020 con l'obiettivo di creare un ponte tra persone generose e cause importanti. La nostra piattaforma rende semplice e trasparente il processo di donazione, permettendo a chiunque di contribuire a progetti di grande impatto sociale.</p>
+        <p>Lavoriamo ogni giorno per garantire che ogni euro donato faccia la differenza, selezionando attentamente le campagne e monitorando i risultati ottenuti. Crediamo fermamente che la trasparenza sia fondamentale per costruire fiducia.</p>
+        <div class="mission-button">
+          <a routerLink="/campaigns" class="btn btn-primary">Scopri le Nostre Campagne</a>
+        </div>
+      </div>
+      <div class="mission-image">
+        <img src="assets/about/mission.jpg" alt="La nostra missione">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Values Section -->
+<section class="values-section">
+  <div class="container">
+    <h2 class="section-title">I Nostri Valori</h2>
+    <div class="values-grid" @valuesAnimation>
+      <div class="value-card">
+        <div class="value-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h3>Trasparenza</h3>
+        <p>Rendiamo visibile ogni donazione e il suo impatto, condividendo aggiornamenti regolari sui progetti.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3>Efficacia</h3>
+        <p>Selezioniamo progetti con il massimo potenziale di impatto, ottimizzando l'utilizzo di ogni donazione ricevuta.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <h3>Inclusività</h3>
+        <p>Crediamo che chiunque possa contribuire al cambiamento, indipendentemente dall'importo della donazione.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <h3>Sicurezza</h3>
+        <p>Proteggiamo i dati dei nostri donatori e garantiamo che i fondi arrivino sempre a destinazione in modo sicuro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section">
+  <div class="container">
+    <h2 class="section-title">Il Nostro Team</h2>
+    <p class="section-description">Persone appassionate che lavorano ogni giorno per fare la differenza</p>
+    <div class="team-grid" @teamAnimation>
+      <div class="team-member" *ngFor="let member of teamMembers">
+        <div class="member-image">
+          <img [src]="member.image || 'assets/team/default.jpg'" [alt]="member.name">
+        </div>
+        <div class="member-info">
+          <h3>{{ member.name }}</h3>
+          <span class="position">{{ member.position }}</span>
+          <p class="bio">{{ member.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- History Timeline Section -->
+<section class="timeline-section">
+  <div class="container">
+    <h2 class="section-title">La Nostra Storia</h2>
+    <div class="timeline" @timelineAnimation>
+      <div class="timeline-item">
+        <div class="timeline-marker">2020</div>
+        <div class="timeline-content">
+          <h3>La Nascita di DONACTION</h3>
+          <p>Durante la pandemia di COVID-19, un gruppo di amici ha deciso di creare una piattaforma per connettere persone generose con cause urgenti.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">2021</div>
+        <div class="timeline-content">
+          <h3>Primi 100 Progetti Finanziati</h3>
+          <p>Abbiamo raggiunto un importante traguardo, finanziando con successo più di 100 progetti in tutta Italia.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">2022</div>
+        <div class="timeline-content">
+          <h3>Espansione in Europa</h3>
+          <p>Abbiamo iniziato a supportare progetti in altri paesi europei, ampliando la nostra rete di beneficenza.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">2023</div>
+        <div class="timeline-content">
+          <h3>Premi e Riconoscimenti</h3>
+          <p>DONACTION ha ricevuto il premio "Innovazione Sociale" per il suo contributo nel settore della beneficenza digitale.</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker">2024</div>
+        <div class="timeline-content">
+          <h3>1 Milione di € Raccolti</h3>
+          <p>Abbiamo superato il milione di euro in donazioni, un traguardo che celebriamo insieme a tutti i nostri generosi donatori.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Partners Section -->
+<section class="partners-section">
+  <div class="container">
+    <h2 class="section-title">I Nostri Partner</h2>
+    <p class="section-description">Collaboriamo con organizzazioni che condividono la nostra visione</p>
+    <div class="partners-logo">
+      <div class="partner">
+        <img src="assets/partners/partner1.png" alt="Partner 1">
+      </div>
+      <div class="partner">
+        <img src="assets/partners/partner2.png" alt="Partner 2">
+      </div>
+      <div class="partner">
+        <img src="assets/partners/partner3.png" alt="Partner 3">
+      </div>
+      <div class="partner">
+        <img src="assets/partners/partner4.png" alt="Partner 4">
+      </div>
+      <div class="partner">
+        <img src="assets/partners/partner5.png" alt="Partner 5">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Unisciti a Noi nella Missione</h2>
+      <p>Ogni donazione, grande o piccola, può fare la differenza. Esplora le nostre campagne e scopri come puoi contribuire.</p>
+      <div class="cta-buttons">
+        <a routerLink="/campaigns" class="btn btn-primary">Dona Ora</a>
+        <a routerLink="/contact" class="btn btn-outline">Contattaci</a>
+      </div>
+    </div>
+  </div>
+</section>

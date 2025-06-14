@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+/* Page transition animations */
+.route-animations-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease both;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
+}

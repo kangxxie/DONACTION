@@ -5,5 +5,6 @@ export interface Campaign {
   description: string;
   goal: number;
   collected: number;
-  imageUrl?: string; // Aggiunta questa proprietà con "?" per renderla opzionale
+  imageUrl?: string;  // Aggiunta questa proprietà con "?" per renderla opzionale
+  category: string;
 }

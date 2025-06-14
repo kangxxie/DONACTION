@@ -1,16 +1,68 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
-import { CampaignService } from '../../services/campaign.service';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Campaign } from '../../models/campaign.model';
-import { CurrencyPipe } from '@angular/common';
+import { CampaignService } from '../../services/campaign.service';
+import { Router } from '@angular/router';
+import { 
+  trigger, 
+  state, 
+  style, 
+  animate, 
+  transition, 
+  query, 
+  stagger 
+} from '@angular/animations';
 
 @Component({
   selector: 'app-home',
   imports: [CommonModule, RouterModule, CurrencyPipe],
   standalone: true,
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']   
+  styleUrls: ['./home.component.css'],
+  animations: [
+    // Hero section animation
+    trigger('heroAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('0.8s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ]),
+    // Featured campaigns animation with stagger effect
+    trigger('campaignAnimation', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(40px)' }),
+          stagger(100, [
+            animate('0.6s cubic-bezier(0.35, 0, 0.25, 1)', 
+              style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    // How it works section animation
+    trigger('stepsAnimation', [
+      transition(':enter', [
+        query('.step', [
+          style({ opacity: 0, transform: 'translateY(30px)' }),
+          stagger(200, [
+            animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ]),
+    // Stats animation
+    trigger('statsAnimation', [
+      transition(':enter', [
+        query('.stat', [
+          style({ opacity: 0, transform: 'translateY(30px)' }),
+          stagger(150, [
+            animate('0.5s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class HomeComponent implements OnInit {
   campaigns: Campaign[] = [];
@@ -57,7 +109,8 @@ export class HomeComponent implements OnInit {
         description: 'Supporta le famiglie colpite dal terremoto nel Centro Italia con cibo, riparo e assistenza medica.',
         goal: 50000,
         collected: 32600,
-        imageUrl: './assets/earthquake.png'
+        imageUrl: './assets/earthquake.png',
+        category: 'Terremoti'
       },
       {
         id: 2,
@@ -65,7 +118,8 @@ export class HomeComponent implements OnInit {
         description: 'Finanzia programmi educativi per bambini provenienti da famiglie a basso reddito in tutta Italia.',
         goal: 25000,
         collected: 18750,
-        imageUrl: './assets/education.png'
+        imageUrl: './assets/education.png',
+        category: 'Educazione'
       },
       {
         id: 3,
@@ -73,7 +127,8 @@ export class HomeComponent implements OnInit {
         description: 'Aiuta ad acquistare nuove attrezzature mediche per migliorare la diagnosi e il trattamento nei reparti pediatrici.',
         goal: 75000,
         collected: 42300,
-        imageUrl: './assets/hospital.png'
+        imageUrl: './assets/hospital.png',
+        category: 'Ospedali'
       }
     ];
   }

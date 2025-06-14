@@ -1,10 +1,138 @@
-<h2>Elenco Campagne</h2>
-<ul>
-  <li *ngFor="let c of campaigns">
-    <a [routerLink]="['/campaigns', c.id]">{{ c.title }} - Racc. {{ c.collected }}/{{ c.goal }}€</a>
-  </li>
-</ul>
-<button (click)="createCampaign()">Crea Nuova Campagna</button>
-<div *ngIf="errorMessage" class="error">
-  {{ errorMessage }}
+<div class="campaign-list-page">
+  <div class="hero-banner">
+    <div class="container">
+      <h1 class="animated-title">Campagne di Raccolta Fondi</h1>
+      <p class="animated-subtitle">Scopri le cause che hanno bisogno del tuo sostegno</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Filters Section with Animation -->
+    <div class="filters-section" @filterAnimation>
+      <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (input)="onSearchChange()" 
+          placeholder="Cerca campagne..."
+          class="search-input"
+        >
+        <div class="search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="filter-options">
+        <div class="filter-group">
+          <label for="category-filter">Categoria:</label>
+          <select 
+            id="category-filter" 
+            [(ngModel)]="categoryFilter" 
+            (change)="onCategoryChange()"
+            class="filter-select"
+          >
+            <option value="all">Tutte le categorie</option>
+            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="sort-options">Ordina per:</label>
+          <select 
+            id="sort-options" 
+            [(ngModel)]="sortOption" 
+            (change)="onSortChange()"
+            class="filter-select"
+          >
+            <option value="newest">Più recenti</option>
+            <option value="mostFunded">Più finanziati</option>
+            <option value="leastFunded">Meno finanziati</option>
+            <option value="goalHighest">Obiettivo più alto</option>
+          </select>
+        </div>
+        
+        <button class="btn-reset pulse-effect" (click)="resetFilters()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section">
+      <!-- Enhanced Loading Indicator -->
+      <div class="loading-indicator" *ngIf="loading">
+        <div class="loader">
+          <div class="circle"></div>
+          <div class="circle"></div>
+          <div class="circle"></div>
+        </div>
+        <p>Caricamento campagne...</p>
+      </div>
+      
+      <!-- Error Message with Animation -->
+      <div class="error-message animated-fade-in" *ngIf="error && !loading">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <p>{{ error }}</p>
+        <button (click)="loadCampaigns()" class="btn-retry">Riprova</button>
+      </div>
+      
+      <!-- No Results with Animation -->
+      <div class="no-results animated-fade-in" *ngIf="filteredCampaigns.length === 0 && !loading && !error">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <p>Nessuna campagna trovata con i criteri di ricerca selezionati.</p>
+        <button (click)="resetFilters()" class="btn-retry">Reimposta filtri</button>
+      </div>
+      
+      <!-- Campaign Grid with Stagger Animation -->
+      <div class="campaign-grid" @cardAnimation *ngIf="filteredCampaigns.length > 0 && !loading">
+        <div class="campaign-card" *ngFor="let campaign of filteredCampaigns">
+          <div class="campaign-image">
+            <img [src]="campaign.imageUrl || 'assets/default-campaign.jpg'" [alt]="campaign.title">
+            <div class="campaign-overlay">
+              <button class="btn-view-details" [routerLink]="['/campaign', campaign.id]">Dettagli</button>
+            </div>
+          </div>
+          <div class="campaign-content">
+            <div class="category-badge">{{ campaign.category }}</div>
+            <h3>{{ campaign.title }}</h3>
+            <p class="campaign-description">{{ campaign.description }}</p>
+            <div class="campaign-progress">
+              <div class="progress-bar">
+                <div class="progress" @progressAnimation [style.width]="(campaign.collected / campaign.goal * 100) + '%'"></div>
+              </div>
+              <div class="progress-stats">
+                <div class="collected-amount">
+                  <span class="amount">{{ campaign.collected | currency:'EUR' }}</span>
+                  <span class="label">raccolti</span>
+                </div>
+                <div class="percentage">{{ (campaign.collected / campaign.goal * 100) | number:'1.0-0' }}%</div>
+                <div class="goal-amount">
+                  <span class="label">obiettivo</span>
+                  <span class="amount">{{ campaign.goal | currency:'EUR' }}</span>
+                </div>
+              </div>
+            </div>
+            <button class="btn-donate" [routerLink]="['/campaign', campaign.id]">
+              <span class="btn-text">Dona Ora </span>
+              <span class="btn-icon">❤</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

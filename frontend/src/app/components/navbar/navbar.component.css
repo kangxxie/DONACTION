@@ -1,3 +1,4 @@
+/* Base styling */
 .navbar {
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -17,16 +18,72 @@
   position: relative;
 }
 
+/* Logo styling */
 .navbar-logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
   font-size: 24px;
   font-weight: 700;
-  color: #ff5a5f;
-  text-decoration: none;
   letter-spacing: 1px;
 }
 
+.logo-icon {
+  color: #ff5a5f;
+  font-size: 1.2em;
+  margin-right: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+.logo-text {
+  display: flex;
+}
+
+.don {
+  color: #ff5a5f;
+  font-weight: 800;
+}
+
+.action {
+  color: #333;
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Desktop Menu Styling */
+.desktop-menu ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 25px;
+  align-items: center;
+}
+
+.desktop-menu li {
+  margin: 0;
+}
+
+.desktop-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.desktop-menu a:hover, .desktop-menu a.active {
+  color: #ff5a5f;
+}
+
+/* Hamburger Button */
 .hamburger {
-  display: none;
+  display: none; /* Hidden on desktop */
   cursor: pointer;
 }
 
@@ -39,27 +96,9 @@
   background-color: #333;
 }
 
-.nav-menu ul {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.nav-menu li {
-  margin: 0 15px;
-}
-
-.nav-menu a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  font-size: 16px;
-  transition: color 0.3s ease;
-}
-
-.nav-menu a:hover, .nav-menu a.active {
-  color: #ff5a5f;
+/* Mobile Menu */
+.mobile-menu {
+  display: none; /* Hidden by default */
 }
 
 .btn-donate {
@@ -75,9 +114,14 @@
   transform: translateY(-2px);
 }
 
+/* Media Query for Mobile */
 @media screen and (max-width: 768px) {
+  .desktop-menu {
+    display: none; /* Hide desktop menu on mobile */
+  }
+  
   .hamburger {
-    display: block;
+    display: block; /* Show hamburger on mobile */
   }
   
   .hamburger.active .bar:nth-child(1) {
@@ -92,7 +136,8 @@
     transform: translateY(-8px) rotate(-45deg);
   }
   
-  .nav-menu {
+  .mobile-menu {
+    display: block; /* Show mobile menu structure */
     position: absolute;
     top: 100%;
     left: 0;
@@ -102,17 +147,47 @@
     border-radius: 0 0 10px 10px;
   }
   
-  .nav-menu ul {
+  .mobile-menu ul {
     flex-direction: column;
     padding: 20px;
+    list-style: none;
+    margin: 0;
   }
   
-  .nav-menu li {
+  .mobile-menu li {
     margin: 10px 0;
     text-align: center;
   }
   
-  .nav-menu .donate-button {
+  .mobile-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .mobile-menu a:hover, .mobile-menu a.active {
+    color: #ff5a5f;
+  }
+  
+  .mobile-menu .donate-button {
     margin-top: 15px;
   }
 }
+
+/* Add hover effect to hamburger */
+.hamburger:hover .bar {
+  background-color: #ff5a5f;  /* Same red as the logo */
+}
+
+/* If you want a more subtle transition effect */
+.bar {
+  transition: background-color 0.3s ease;  /* Smooth color transition */
+}
+
+/* When hamburger is active/open, keep the red color */
+.hamburger.active .bar {
+  background-color: #ff5a5f;
+}
+

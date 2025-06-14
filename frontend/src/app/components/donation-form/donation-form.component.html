@@ -1,15 +1,458 @@
-<h2>Effettua Donazione</h2>
-<form [formGroup]="donationForm" (ngSubmit)="onSubmit()">
-  <label>Nome (opzionale):
-    <input formControlName="donor_name" />
-  </label>
-  <br>
-  <label>Importo (€):
-    <input type="number" formControlName="amount" />
-  </label>
-  <br>
-  <button type="submit" [disabled]="donationForm.invalid">Dona</button>
-</form>
-<div *ngIf="errorMessage" class="error">
-  {{ errorMessage }}
+<!-- Hero Section -->
+<div class="hero-section" @heroAnimation>
+  <div class="hero-content container">
+    <h1 class="animated-title">Effettua una Donazione</h1>
+    <p class="animated-subtitle">Il tuo contributo può fare la differenza nella vita di molte persone</p>
+  </div>
 </div>
+
+<!-- Progress Bar -->
+<div class="progress-container">
+  <div class="container">
+    <div class="progress-bar-wrapper">
+      <div class="step-progress">
+        <div class="progress-track">
+          <div class="progress-fill" [style.width]="(currentStep / totalSteps * 100) + '%'"></div>
+        </div>
+        <div class="step-circles">
+          <div 
+            class="step-circle" 
+            *ngFor="let step of [1, 2, 3]" 
+            [class.active]="step <= currentStep"
+            [class.completed]="step < currentStep">
+            {{ step }}
+          </div>
+        </div>
+      </div>
+      <div class="step-labels">
+        <div class="step-label" [class.active]="currentStep >= 1">Importo</div>
+        <div class="step-label" [class.active]="currentStep >= 2">Dati Personali</div>
+        <div class="step-label" [class.active]="currentStep >= 3">Pagamento</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Donation Process Container -->
+<div class="donation-container" @formAnimation>
+  <div class="container">
+    <!-- Step 1: Select Donation Amount -->
+    <div class="donation-step" *ngIf="currentStep === 1">
+      <div class="step-header">
+        <h2>Scegli l'importo della donazione</h2>
+        <p>Seleziona uno degli importi predefiniti o inserisci un importo personalizzato.</p>
+      </div>
+      
+      <div class="amount-selection">
+        <div class="predefined-amounts">
+          <button 
+            *ngFor="let amount of donationAmounts" 
+            class="amount-btn" 
+            [class.selected]="selectedAmount === amount"
+            (click)="setDonationAmount(amount)">
+            {{ amount | currency:'EUR' }}
+          </button>
+        </div>
+        
+        <div class="custom-amount">
+          <div class="input-with-icon">
+            <span class="currency-symbol">€</span>
+            <input 
+              type="number" 
+              placeholder="Importo personalizzato" 
+              min="1" 
+              [value]="customAmount || ''" 
+              (input)="setCustomAmount($event)"
+              [class.active]="customAmount !== null">
+          </div>
+        </div>
+      </div>
+      
+      <div class="donation-impact">
+        <h3>Il tuo impatto</h3>
+        <div class="impact-item" *ngIf="getTotalDonation() >= 10">
+          <div class="impact-icon">🍲</div>
+          <div class="impact-text">
+            <strong>{{ getTotalDonation() >= 25 ? 'Pasti per una settimana' : 'Pasti per un giorno' }}</strong>
+            <p>{{ getTotalDonation() >= 25 ? 'Fornirai pasti nutrienti per una settimana a chi ne ha bisogno.' : 'Fornirai pasti nutrienti per un giorno a chi ne ha bisogno.' }}</p>
+          </div>
+        </div>
+        <div class="impact-item" *ngIf="getTotalDonation() >= 50">
+          <div class="impact-icon">📚</div>
+          <div class="impact-text">
+            <strong>Kit scolastico completo</strong>
+            <p>Fornirai materiale scolastico per un bambino per un intero anno.</p>
+          </div>
+        </div>
+        <div class="impact-item" *ngIf="getTotalDonation() >= 100">
+          <div class="impact-icon">💊</div>
+          <div class="impact-text">
+            <strong>Assistenza medica</strong>
+            <p>Garantirai visite mediche e medicinali essenziali per un mese.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="step-actions">
+        <button 
+          class="btn btn-primary" 
+          [disabled]="getTotalDonation() <= 0"
+          (click)="nextStep()">
+          Continua
+        </button>
+        <a routerLink="/campaigns" class="btn btn-outline">Torna alle campagne</a>
+      </div>
+    </div>
+    
+    <!-- Step 2: Personal Information -->
+    <div class="donation-step" *ngIf="currentStep === 2">
+      <div class="step-header">
+        <h2>I tuoi dati</h2>
+        <p>Per poterti inviare la ricevuta e ringraziarti personalmente.</p>
+      </div>
+      
+      <form [formGroup]="donationForm" class="personal-info-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Nome *</label>
+            <input 
+              type="text" 
+              id="firstName" 
+              formControlName="firstName" 
+              [ngClass]="{ 'is-invalid': submitted && df['firstName'].errors }">
+            <div class="error-message" *ngIf="df['firstName'].touched && df['firstName'].errors">
+              <span *ngIf="df['firstName'].errors['required']">Il nome è obbligatorio</span>
+              <span *ngIf="df['firstName'].errors['minlength']">Il nome deve avere almeno 2 caratteri</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="lastName">Cognome *</label>
+            <input 
+              type="text" 
+              id="lastName" 
+              formControlName="lastName" 
+              [ngClass]="{ 'is-invalid': submitted && df['lastName'].errors }">
+            <div class="error-message" *ngIf="df['lastName'].touched && df['lastName'].errors">
+              <span *ngIf="df['lastName'].errors['required']">Il cognome è obbligatorio</span>
+              <span *ngIf="df['lastName'].errors['minlength']">Il cognome deve avere almeno 2 caratteri</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email" 
+              [ngClass]="{ 'is-invalid': submitted && df['email'].errors }">
+            <div class="error-message" *ngIf="df['email'].touched && df['email'].errors">
+              <span *ngIf="df['email'].errors['required']">L'email è obbligatoria</span>
+              <span *ngIf="df['email'].errors['email']">Inserisci un'email valida</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="phoneNumber">Telefono (opzionale)</label>
+            <input 
+              type="tel" 
+              id="phoneNumber" 
+              formControlName="phoneNumber" 
+              [ngClass]="{ 'is-invalid': submitted && df['phoneNumber'].errors }">
+            <div class="error-message" *ngIf="df['phoneNumber'].touched && df['phoneNumber'].errors">
+              <span *ngIf="df['phoneNumber'].errors['pattern']">Inserisci un numero di telefono valido</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Messaggio (opzionale)</label>
+          <textarea 
+            id="message" 
+            rows="3" 
+            formControlName="message"
+            placeholder="Condividi il motivo della tua donazione...">
+          </textarea>
+        </div>
+        
+        <div class="form-options">
+          <div class="form-check">
+            <input type="checkbox" id="taxDeduction" formControlName="taxDeduction">
+            <label for="taxDeduction">
+              Voglio ricevere la ricevuta per la detrazione fiscale
+            </label>
+          </div>
+          
+          <div class="form-check">
+            <input type="checkbox" id="anonymous" formControlName="anonymous">
+            <label for="anonymous">
+              Voglio effettuare una donazione anonima
+            </label>
+          </div>
+        </div>
+      </form>
+      
+      <div class="donation-summary">
+        <h3>Riepilogo Donazione</h3>
+        <div class="summary-row">
+          <span>Importo Donazione:</span>
+          <span class="summary-amount">{{ getTotalDonation() | currency:'EUR' }}</span>
+        </div>
+      </div>
+      
+      <div class="step-actions">
+        <button class="btn btn-primary" (click)="nextStep()">Continua al pagamento</button>
+        <button class="btn btn-outline" (click)="prevStep()">Indietro</button>
+      </div>
+    </div>
+    
+    <!-- Step 3: Payment Information -->
+    <div class="donation-step" *ngIf="currentStep === 3">
+      <div class="step-header">
+        <h2>Informazioni di pagamento</h2>
+        <p>Tutte le transazioni sono sicure e criptate.</p>
+      </div>
+      
+      <div class="payment-methods">
+        <div class="payment-method-selection">
+          <h3>Seleziona il metodo di pagamento</h3>
+          <div class="payment-options">
+            <div 
+              *ngFor="let method of paymentMethods" 
+              class="payment-option" 
+              [class.selected]="selectedPaymentMethod === method.id"
+              (click)="selectPaymentMethod(method.id)">
+              <div class="payment-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" *ngIf="method.icon === 'credit-card'">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" *ngIf="method.icon === 'paypal'">
+                  <path d="M18 6h-4a2 2 0 00-2 2v8"></path>
+                  <path d="M14 12h4a2 2 0 002-2v-2m-6 6v4"></path>
+                  <path d="M6 14h4a2 2 0 002-2V6m-8 8a2 2 0 110-4"></path>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" *ngIf="method.icon === 'bank'">
+                  <rect x="3" y="10" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M12 4l7 6H5l7-6z"></path>
+                </svg>
+              </div>
+              <span>{{ method.name }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Credit Card Payment Form -->
+        <div class="payment-details" *ngIf="selectedPaymentMethod === 'card'">
+          <form [formGroup]="paymentForm" class="card-payment-form">
+            <div class="form-group">
+              <label for="cardNumber">Numero Carta *</label>
+              <input 
+                type="text" 
+                id="cardNumber" 
+                formControlName="cardNumber" 
+                placeholder="1234 5678 9012 3456"
+                maxlength="16"
+                [ngClass]="{ 'is-invalid': submitted && pf['cardNumber'].errors }">
+              <div class="error-message" *ngIf="pf['cardNumber'].touched && pf['cardNumber'].errors">
+                <span *ngIf="pf['cardNumber'].errors['required']">Il numero della carta è obbligatorio</span>
+                <span *ngIf="pf['cardNumber'].errors['pattern']">Inserisci un numero di carta valido (16 cifre)</span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="cardHolder">Intestatario Carta *</label>
+              <input 
+                type="text" 
+                id="cardHolder" 
+                formControlName="cardHolder" 
+                placeholder="Mario Rossi"
+                [ngClass]="{ 'is-invalid': submitted && pf['cardHolder'].errors }">
+              <div class="error-message" *ngIf="pf['cardHolder'].touched && pf['cardHolder'].errors">
+                <span *ngIf="pf['cardHolder'].errors['required']">L'intestatario della carta è obbligatorio</span>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="expiryDate">Data Scadenza *</label>
+                <input 
+                  type="text" 
+                  id="expiryDate" 
+                  formControlName="expiryDate" 
+                  placeholder="MM/AA"
+                  [ngClass]="{ 'is-invalid': submitted && pf['expiryDate'].errors }">
+                <div class="error-message" *ngIf="pf['expiryDate'].touched && pf['expiryDate'].errors">
+                  <span *ngIf="pf['expiryDate'].errors['required']">La data di scadenza è obbligatoria</span>
+                  <span *ngIf="pf['expiryDate'].errors['pattern']">Formato: MM/AA</span>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="cvv">CVV *</label>
+                <input 
+                  type="text" 
+                  id="cvv" 
+                  formControlName="cvv" 
+                  placeholder="123"
+                  maxlength="4"
+                  [ngClass]="{ 'is-invalid': submitted && pf['cvv'].errors }">
+                <div class="error-message" *ngIf="pf['cvv'].touched && pf['cvv'].errors">
+                  <span *ngIf="pf['cvv'].errors['required']">Il CVV è obbligatorio</span>
+                  <span *ngIf="pf['cvv'].errors['pattern']">Inserisci un CVV valido (3-4 cifre)</span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <!-- PayPal Instructions -->
+        <div class="payment-details" *ngIf="selectedPaymentMethod === 'paypal'">
+          <div class="payment-instructions">
+            <p>Sarai reindirizzato al sito di PayPal per completare la donazione in modo sicuro.</p>
+            <div class="paypal-logo">
+              <img src="assets/paypal-logo.png" alt="PayPal">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bank Transfer Instructions -->
+        <div class="payment-details" *ngIf="selectedPaymentMethod === 'bank'">
+          <div class="payment-instructions">
+            <p>Ecco le informazioni per effettuare un bonifico bancario:</p>
+            <div class="bank-details">
+              <div class="bank-detail-row">
+                <span class="detail-label">Beneficiario:</span>
+                <span class="detail-value">DONACTION Onlus</span>
+              </div>
+              <div class="bank-detail-row">
+                <span class="detail-label">IBAN:</span>
+                <span class="detail-value">IT12A0123456789000000123456</span>
+              </div>
+              <div class="bank-detail-row">
+                <span class="detail-label">Banca:</span>
+                <span class="detail-value">Banca Solidarietà</span>
+              </div>
+              <div class="bank-detail-row">
+                <span class="detail-label">Causale:</span>
+                <span class="detail-value">Donazione {{ campaignId ? 'Campagna #' + campaignId : '' }}</span>
+              </div>
+            </div>
+            <p class="bank-note">Importante: Dopo aver effettuato il bonifico, per favore invia una conferma via email a info&#64;donaction.it</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="donation-summary">
+        <h3>Riepilogo Donazione</h3>
+        <div class="summary-row">
+          <span>Importo Donazione:</span>
+          <span class="summary-amount">{{ getTotalDonation() | currency:'EUR' }}</span>
+        </div>
+        <div class="summary-row" *ngIf="df['taxDeduction'].value">
+          <span>Detrazione Fiscale:</span>
+          <span class="summary-detail">Sì</span>
+        </div>
+        <div class="summary-row" *ngIf="df['anonymous'].value">
+          <span>Donazione Anonima:</span>
+          <span class="summary-detail">Sì</span>
+        </div>
+        <div class="summary-total">
+          <span>Totale:</span>
+          <span class="summary-total-amount">{{ getTotalDonation() | currency:'EUR' }}</span>
+        </div>
+      </div>
+      
+      <div class="security-info">
+        <div class="security-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </div>
+        <div class="security-text">
+          <p>La tua donazione è sicura. Utilizziamo sistemi di crittografia avanzata per proteggere le tue informazioni personali.</p>
+        </div>
+      </div>
+      
+      <div class="step-actions">
+        <button 
+          class="btn btn-primary" 
+          [disabled]="loading || (selectedPaymentMethod === 'card' && paymentForm.invalid)"
+          (click)="submitDonation()">
+          <span *ngIf="!loading">Completa Donazione</span>
+          <span *ngIf="loading" class="button-loader">
+            <span class="loader-dot"></span>
+            <span class="loader-dot"></span>
+            <span class="loader-dot"></span>
+          </span>
+        </button>
+        <button class="btn btn-outline" (click)="prevStep()">Indietro</button>
+      </div>
+    </div>
+    
+    <!-- Success Message -->
+    <div class="donation-success" *ngIf="success">
+      <div class="success-content">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2>Grazie per la tua donazione!</h2>
+        <p>La tua generosità farà la differenza. Abbiamo inviato una conferma via email con tutti i dettagli.</p>
+        <div class="donation-details">
+          <div class="donation-detail-row">
+            <span>Importo donato:</span>
+            <span>{{ getTotalDonation() | currency:'EUR' }}</span>
+          </div>
+        </div>
+        <div class="success-actions">
+          <a routerLink="/campaigns" class="btn btn-primary">Esplora altre campagne</a>
+          <a routerLink="/" class="btn btn-outline">Torna alla Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Why Donate Section -->
+<section class="why-donate-section" *ngIf="!success" @stepsAnimation>
+  <div class="container">
+    <h2 class="section-title">Perché Donare</h2>
+    <div class="why-donate-grid">
+      <div class="step-item">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </div>
+        <h3>Impatto Immediato</h3>
+        <p>Il tuo contributo arriva direttamente ai progetti che ne hanno bisogno, con un impatto concreto e misurabile.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h3>Trasparenza Totale</h3>
+        <p>Ti informiamo regolarmente su come vengono utilizzati i fondi e sui progressi dei progetti che sostieni.</p>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3>Benefici Fiscali</h3>
+        <p>Le donazioni sono fiscalmente deducibili. Ti forniamo tutta la documentazione necessaria per la dichiarazione dei redditi.</p>
+      </div>
+    </div>
+  </div>
+</section>

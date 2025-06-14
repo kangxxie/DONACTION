@@ -1,16 +1,33 @@
 <nav class="navbar">
   <div class="navbar-container">
     <div class="navbar-logo">
-      <a routerLink="/">DONACTION</a>
+      <a routerLink="/">
+        <span class="logo-icon">❤</span>
+        <span class="logo-text">
+          <span class="don">DON</span><span class="action">ACTION</span>
+        </span>
+      </a>
     </div>
     
+<div class="desktop-menu">
+      <ul>
+        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+        <li><a routerLink="/campaigns" routerLinkActive="active">Campagne</a></li>
+        <li><a routerLink="/about" routerLinkActive="active">Chi Siamo</a></li>
+        <li><a routerLink="/contact" routerLinkActive="active">Contatti</a></li>
+        <li class="donate-button" ><a routerLink="/donate" class="btn-donate">Dona Ora</a></li>
+      </ul>
+    </div>
+    
+    <!-- Hamburger Menu - Only visible on small screens -->
     <div class="hamburger" [class.active]="isMenuOpen" (click)="toggleMenu()">
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
     </div>
     
-    <div class="nav-menu" [@dropdownAnimation]="isMenuOpen ? 'visible' : 'hidden'">
+    <!-- Mobile Navigation Menu - Visible when hamburger is clicked -->
+    <div class="mobile-menu" [@dropdownAnimation]="isMenuOpen ? 'visible' : 'hidden'">
       <ul>
         <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
         <li><a routerLink="/campaigns" routerLinkActive="active">Campagne</a></li>
