@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { CampaignService } from '../../services/campaign.service';
 
 @Component({
   selector: 'app-navbar',
@@ -31,8 +33,19 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class NavbarComponent {
   isMenuOpen = false;
+  campaigns: any[] = [];
+  
+  constructor(
+    private campaignService: CampaignService,
+    private router: Router
+  ) {
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+    donate(campaignId: number): void {
+    this.router.navigate(['/donate', campaignId]);
   }
 }

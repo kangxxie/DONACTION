@@ -70,7 +70,7 @@ import {
 export class AboutComponent implements OnInit {
   teamMembers = [
     {
-      name: 'Marco Rossi',
+      name: 'Marco Soffia ',
       position: 'Fondatore & CEO',
       bio: 'Con oltre 15 anni di esperienza nel settore no-profit, Marco ha fondato DONACTION con la visione di rendere la beneficenza più accessibile e trasparente.',
       image: 'assets/team/marco.jpg'

@@ -12,10 +12,9 @@
 <div class="desktop-menu">
       <ul>
         <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-        <li><a routerLink="/campaigns" routerLinkActive="active">Campagne</a></li>
         <li><a routerLink="/about" routerLinkActive="active">Chi Siamo</a></li>
         <li><a routerLink="/contact" routerLinkActive="active">Contatti</a></li>
-        <li class="donate-button" ><a routerLink="/donate" class="btn-donate">Dona Ora</a></li>
+        <li class="donate-button"><a routerLink="/campaigns" class="btn-donate">Dona Ora</a></li>
       </ul>
     </div>
     
@@ -30,10 +29,9 @@
     <div class="mobile-menu" [@dropdownAnimation]="isMenuOpen ? 'visible' : 'hidden'">
       <ul>
         <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-        <li><a routerLink="/campaigns" routerLinkActive="active">Campagne</a></li>
         <li><a routerLink="/about" routerLinkActive="active">Chi Siamo</a></li>
         <li><a routerLink="/contact" routerLinkActive="active">Contatti</a></li>
-        <li class="donate-button"><a routerLink="/donate" class="btn-donate">Dona Ora</a></li>
+        <li class="donate-button"><a routerLink="/campaigns" class="btn-donate">Dona Ora</a></li>
       </ul>
     </div>
   </div>
