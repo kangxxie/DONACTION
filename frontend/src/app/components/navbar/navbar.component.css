@@ -2,7 +2,7 @@
 .navbar {
   background-color: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: sticky; /* Cambiato da relative a sticky per migliore UX */
   top: 0;
   z-index: 1000;
   width: 100%;
@@ -10,12 +10,12 @@
 
 .navbar-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
-  position: relative;
+  box-sizing: border-box; /* Assicura che padding non causi overflow */
 }
 
 /* Logo styling */
@@ -55,139 +55,349 @@
   100% { transform: scale(1); }
 }
 
-/* Desktop Menu Styling */
-.desktop-menu ul {
+/* Menu principale */
+.navbar-menu {
   display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 25px;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 20px;
+}
+
+.navbar-start, .navbar-end {
+  display: flex;
   align-items: center;
 }
 
-.desktop-menu li {
-  margin: 0;
+.navbar-end {
+  margin-left: auto;
 }
 
-.desktop-menu a {
-  text-decoration: none;
+.navbar-item {
+  padding: 0.5rem 1rem;
+  margin: 0 5px;
   color: #333;
+  text-decoration: none;
   font-weight: 500;
-  font-size: 16px;
-  transition: color 0.3s ease;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
 }
 
-.desktop-menu a:hover, .desktop-menu a.active {
+.navbar-item:hover {
   color: #ff5a5f;
 }
 
-/* Hamburger Button */
-.hamburger {
-  display: none; /* Hidden on desktop */
-  cursor: pointer;
+.navbar-item.active {
+  color: #ff5a5f;
 }
 
-.bar {
-  display: block;
-  width: 25px;
-  height: 3px;
-  margin: 5px auto;
-  transition: all 0.3s ease;
-  background-color: #333;
+.icon {
+  margin-right: 6px;
+  font-size: 0.9rem;
 }
 
-/* Mobile Menu */
-.mobile-menu {
-  display: none; /* Hidden by default */
-}
-
-.btn-donate {
+/* Bottoni speciali */
+.donate-btn {
   background-color: #ff5a5f;
-  color: white !important;
-  padding: 8px 20px;
-  border-radius: 30px;
+  color: white !important; /* Forza colore bianco anche su hover */
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
   transition: all 0.3s ease;
 }
 
-.btn-donate:hover {
-  background-color: #ff4146;
+.donate-btn:hover {
+  background-color: #ff424a;
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 90, 95, 0.3);
 }
 
-/* Media Query for Mobile */
-@media screen and (max-width: 768px) {
-  .desktop-menu {
-    display: none; /* Hide desktop menu on mobile */
+.signup-btn {
+  border: 2px solid #ff5a5f;
+  color: #ff5a5f;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  display: flex;
+}
+
+.signup-btn:hover {
+  background-color: #ff5a5f;
+  color: white;
+}
+
+/* Dropdown utente */
+.navbar-dropdown-container {
+  position: relative;
+  margin-right: 10px;
+  display: flex;
+}
+
+.navbar-dropdown-trigger {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.navbar-dropdown-trigger:hover {
+  background-color: #f5f5f5;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  background-color: #ff5a5f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.user-name {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.navbar-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 200px;
+  display: none;
+  z-index: 10;
+}
+
+.navbar-dropdown-container:hover .navbar-dropdown {
+  display: block;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+  color: #ff5a5f;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 5px 0;
+  border: none;
+}
+
+.logout-item {
+  color: #e74c3c;
+}
+
+.logout-item:hover {
+  background-color: #fde8e7;
+  color: #e74c3c;
+}
+
+/* Menu hamburger - CORRETTO */
+.mobile-menu-toggle {
+  display: none;
+  width: 30px;
+  height: 24px; /* Aumentato per più spazio */
+  cursor: pointer;
+  position: relative;
+  margin-right: 10px; /* Spazio a destra */
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #333;
+  transition: all 0.3s ease;
+  position: absolute; /* Posizionamento assoluto per controllo preciso */
+  left: 0;
+}
+
+/* Posizionamento preciso delle linee */
+.mobile-menu-toggle span:nth-child(1) {
+  top: 0;
+}
+
+.mobile-menu-toggle span:nth-child(2) {
+  top: 10px; /* Centro esatto */
+}
+
+.mobile-menu-toggle span:nth-child(3) {
+  top: 20px; /* Fondo */
+}
+
+/* Trasformazione corretta in X quando attivo */
+.mobile-menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 10px; /* Centrato per la rotazione */
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 10px; /* Centrato per la rotazione */
+}
+
+/* Responsive - CORRETTO POSIZIONAMENTO DEL MENU */
+@media (max-width: 1023px) {
+  /* Attiva hamburger menu */
+  .mobile-menu-toggle {
+    display: block;
   }
   
-  .hamburger {
-    display: block; /* Show hamburger on mobile */
-  }
-  
-  .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  
-  .hamburger.active .bar:nth-child(2) {
-    opacity: 0;
-  }
-  
-  .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-  
-  .mobile-menu {
-    display: block; /* Show mobile menu structure */
+  /* Correzione dropdown menu */
+  .navbar-menu {
+    display: block;
+    flex-direction: column;
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    width: 100%;
     background-color: white;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 10px 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Solo padding verticale */
+    box-sizing: border-box;
+    margin: 0; /* Rimuove ogni margine */
+    z-index: 999;
+    border-top: 1px solid #eee;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(-20px);
+    transition: opacity 0.4s ease, 
+                transform 0.4s ease, 
+                max-height 0.4s ease,
+                padding 0.4s ease;
+    pointer-events: none; /* Impedisce click quando invisibile */
   }
   
-  .mobile-menu ul {
+  .navbar-menu.active {
+    display: flex;
+    opacity: 1;
+    max-height: 800px; /* Altezza massima sufficiente per il contenuto */
+    transform: translateY(0);
+    padding: 1rem 0; /* Ripristina il padding quando attivo */
+    pointer-events: all; /* Riattiva i click */
+    transition: opacity 0.5s ease,
+                transform 0.5s ease,
+                max-height 0.5s ease,
+                padding 0.5s ease;
+  }
+  
+  /* Centratura elementi */
+  .navbar-start, .navbar-end {
     flex-direction: column;
-    padding: 20px;
-    list-style: none;
-    margin: 0;
+    width: 100%;
+    align-items: center;
+    margin: 0; /* Rimuove ogni margine */
+    padding: 0 20px; /* Padding orizzontale controllato */
+    box-sizing: border-box;
   }
   
-  .mobile-menu li {
-    margin: 10px 0;
+  .navbar-end {
+    margin-top: 1rem;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+  }
+  
+  /* Elementi menu mobile centrati e dimensionati correttamente */
+  .navbar-item, .signup-btn, .donate-btn {
+    width: 90%; /* Larghezza controllata */
+    margin: 8px auto;
+    justify-content: center;
     text-align: center;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    transition-delay: 0s; /* Valore iniziale */
+  }
+  .navbar-menu.active .navbar-item:nth-child(1),
+  .navbar-menu.active .navbar-start a:nth-child(1) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.1s;
   }
   
-  .mobile-menu a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    font-size: 16px;
-    transition: color 0.3s ease;
+  .navbar-menu.active .navbar-item:nth-child(2),
+  .navbar-menu.active .navbar-start a:nth-child(2) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.15s;
   }
   
-  .mobile-menu a:hover, .mobile-menu a.active {
-    color: #ff5a5f;
+  .navbar-menu.active .navbar-item:nth-child(3),
+  .navbar-menu.active .navbar-start a:nth-child(3) {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
   }
   
-  .mobile-menu .donate-button {
-    margin-top: 15px;
+  .navbar-menu.active .signup-btn {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.25s;
+  }
+  
+  /* Dropdown su mobile */
+  .navbar-dropdown-container {
+    width: 90%;
+    margin: 8px auto;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .navbar-menu.active .navbar-dropdown-container {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
+  }
+  
+  .navbar-dropdown-trigger {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .navbar-dropdown {
+    position: static;
+    width: 100%;
+    margin-top: 10px;
+    box-shadow: none;
+    border: 1px solid #eee;
+  }
+  
+  .navbar-dropdown-container:hover .navbar-dropdown {
+    display: none; /* Disattiva hover su mobile */
+  }
+  
+  /* Attivazione manuale dropdown su mobile */
+  .navbar-dropdown-container.active .navbar-dropdown {
+    display: block;
   }
 }
-
-/* Add hover effect to hamburger */
-.hamburger:hover .bar {
-  background-color: #ff5a5f;  /* Same red as the logo */
-}
-
-/* If you want a more subtle transition effect */
-.bar {
-  transition: background-color 0.3s ease;  /* Smooth color transition */
-}
-
-/* When hamburger is active/open, keep the red color */
-.hamburger.active .bar {
-  background-color: #ff5a5f;
-}
-

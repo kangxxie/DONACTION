@@ -9,30 +9,79 @@
       </a>
     </div>
     
-<div class="desktop-menu">
-      <ul>
-        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-        <li><a routerLink="/about" routerLinkActive="active">Chi Siamo</a></li>
-        <li><a routerLink="/contact" routerLinkActive="active">Contatti</a></li>
-        <li class="donate-button"><a routerLink="/campaigns" class="btn-donate">Dona Ora</a></li>
-      </ul>
+   <!-- Toggle per menu mobile -->
+    <div class="mobile-menu-toggle" [class.active]="isMenuOpen" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
-    
-    <!-- Hamburger Menu - Only visible on small screens -->
-    <div class="hamburger" [class.active]="isMenuOpen" (click)="toggleMenu()">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </div>
-    
-    <!-- Mobile Navigation Menu - Visible when hamburger is clicked -->
-    <div class="mobile-menu" [@dropdownAnimation]="isMenuOpen ? 'visible' : 'hidden'">
-      <ul>
-        <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
-        <li><a routerLink="/about" routerLinkActive="active">Chi Siamo</a></li>
-        <li><a routerLink="/contact" routerLinkActive="active">Contatti</a></li>
-        <li class="donate-button"><a routerLink="/campaigns" class="btn-donate">Dona Ora</a></li>
-      </ul>
+
+    <!-- Menu principale -->
+    <div class="navbar-menu" [class.active]="isMenuOpen">
+      <!-- Link sempre visibili -->
+      <div class="navbar-start">
+        <a routerLink="/campaigns" class="navbar-item" routerLinkActive="active" (click)="closeMenu()">Campagne</a>
+        <a routerLink="/about" class="navbar-item" routerLinkActive="active" (click)="closeMenu()">Chi Siamo</a>
+        <a routerLink="/contact" class="navbar-item" routerLinkActive="active" (click)="closeMenu()">Contatti</a>
+      </div>
+
+      <!-- Link condizionali in base all'autenticazione -->
+      <div class="navbar-end">
+        <!-- Utente non autenticato - SOLO PULSANTE ACCEDI -->
+        <ng-container *ngIf="!isLoggedIn">
+          <a routerLink="/login" class="navbar-item signup-btn" routerLinkActive="active" (click)="closeMenu()">Accedi</a>
+        </ng-container>
+
+        <!-- Utente autenticato -->
+        <ng-container *ngIf="isLoggedIn">
+          <!-- Menu admin -->
+          <ng-container *ngIf="isAdmin">
+            <a routerLink="/admin/dashboard" class="navbar-item dashboard-link" routerLinkActive="active" (click)="closeMenu()">
+              <span class="icon">
+                <i class="fas fa-chart-line"></i>
+              </span>
+              <span>Dashboard</span>
+            </a>
+          </ng-container>
+
+          <!-- Menu utente standard -->
+          <ng-container *ngIf="!isAdmin">
+            <a routerLink="/profile" class="navbar-item profile-link" routerLinkActive="active" (click)="closeMenu()">
+              <span class="icon">
+                <i class="fas fa-user-circle"></i>
+              </span>
+              <span>Area Riservata</span>
+            </a>
+          </ng-container>
+
+          <!-- Dropdown utente (per entrambi) -->
+          <div class="navbar-dropdown-container">
+            <button class="navbar-dropdown-trigger">
+              <span class="user-avatar">{{ userName.charAt(0) }}</span>
+              <span class="user-name">{{ userName }}</span>
+              <span class="icon">
+                <i class="fas fa-chevron-down"></i>
+              </span>
+            </button>
+            <div class="navbar-dropdown">
+              <a routerLink="/profile" class="dropdown-item">Il Mio Profilo</a>
+              <ng-container *ngIf="isAdmin">
+                <a routerLink="/admin/dashboard" class="dropdown-item">Dashboard</a>
+              </ng-container>
+              <hr class="dropdown-divider">
+              <a (click)="logout()" class="dropdown-item logout-item">
+                <span class="icon">
+                  <i class="fas fa-sign-out-alt"></i>
+                </span>
+                <span>Logout</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottone Dona ora -->
+          <a routerLink="/donate" class="navbar-item donate-btn" routerLinkActive="active">Dona Ora</a>
+        </ng-container>
+      </div>
     </div>
   </div>
 </nav>

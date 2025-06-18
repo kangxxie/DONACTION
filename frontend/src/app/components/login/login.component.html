@@ -1,0 +1,51 @@
+<div class="login-container">
+  <div class="login-form">
+    <h2>Accedi</h2>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+      <div *ngIf="passwordResetSuccess" class="alert alert-success">
+        La tua password è stata reimpostata con successo! Accedi con la nuova password.
+        </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          [ngClass]="{'is-invalid': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email richiesta</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Email non valida</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Password richiesta</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">La password deve avere almeno 6 caratteri</span>
+        </div>
+      </div>
+      
+      <button 
+        type="submit" 
+        class="btn-login" 
+        [disabled]="loginForm.invalid || loading">
+        <span *ngIf="!loading">Accedi</span>
+        <span *ngIf="loading">Caricamento...</span>
+      </button>
+      
+      <!-- Link semplificati simili al form di registrazione -->
+      <div class="login-footer">
+        <a [routerLink]="['/forgot-password']" class="forgot-link">Password dimenticata?</a>
+        <p class="register-text">Non hai un account? <a [routerLink]="['/register']">Registrati</a></p>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,142 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Il Tuo Profilo</h1>
+    <p>Gestisci le tue informazioni personali</p>
+  </div>
+  
+  <div class="profile-content">
+    <div class="profile-sidebar">
+      <div class="user-info">
+        <div class="user-avatar">
+          <!-- Iniziali dell'utente -->
+          <div class="avatar-initials">{{ user?.name.charAt(0) }}</div>
+        </div>
+        <h2>{{ user?.name }}</h2>
+        <p class="user-role">{{ user?.role === 'admin' ? 'Amministratore' : 'Utente registrato' }}</p>
+      </div>
+      
+      <div class="stats-card">
+        <h3>Le tue statistiche</h3>
+        <div class="stat-item">
+          <div class="stat-label">Donazioni effettuate</div>
+          <div class="stat-value">{{ userStats.totalDonations }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Totale donato</div>
+          <div class="stat-value">€{{ userStats.donationAmount.toFixed(2) }}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Campagne sostenute</div>
+          <div class="stat-value">{{ userStats.campaignsSupported }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="profile-main">
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      
+      <div class="profile-section">
+        <h3>Informazioni profilo</h3>
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="profile-form">
+          <div class="form-group">
+            <label for="nome">Nome completo</label>
+            <input 
+              type="text" 
+              id="nome" 
+              formControlName="nome" 
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['nome'].errors }"
+            >
+            <div *ngIf="submitted && f['nome'].errors" class="error-message">
+              <div *ngIf="f['nome'].errors['required']">Il nome è obbligatorio</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email" 
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+            >
+            <div *ngIf="submitted && f['email'].errors" class="error-message">
+              <div *ngIf="f['email'].errors['required']">L'email è obbligatoria</div>
+              <div *ngIf="f['email'].errors['email']">Email non valida</div>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              <span *ngIf="loading" class="spinner"></span>
+              Aggiorna profilo
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="profile-section">
+        <h3>Cambia password</h3>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="profile-form">
+          <div class="form-group">
+            <label for="currentPassword">Password attuale</label>
+            <input 
+              type="password" 
+              id="currentPassword" 
+              formControlName="currentPassword" 
+              class="form-control"
+              [ngClass]="{ 'is-invalid': passSubmitted && p['currentPassword'].errors }"
+            >
+            <div *ngIf="passSubmitted && p['currentPassword'].errors" class="error-message">
+              <div *ngIf="p['currentPassword'].errors['required']">Password attuale richiesta</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="newPassword">Nuova password</label>
+            <input 
+              type="password" 
+              id="newPassword" 
+              formControlName="newPassword" 
+              class="form-control"
+              [ngClass]="{ 'is-invalid': passSubmitted && p['newPassword'].errors }"
+            >
+            <div *ngIf="passSubmitted && p['newPassword'].errors" class="error-message">
+              <div *ngIf="p['newPassword'].errors['required']">Nuova password richiesta</div>
+              <div *ngIf="p['newPassword'].errors['minlength']">La password deve avere almeno 8 caratteri</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword">Conferma password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              formControlName="confirmPassword" 
+              class="form-control"
+              [ngClass]="{ 'is-invalid': passSubmitted && p['confirmPassword'].errors }"
+            >
+            <div *ngIf="passSubmitted && p['confirmPassword'].errors" class="error-message">
+              <div *ngIf="p['confirmPassword'].errors['required']">Conferma password richiesta</div>
+              <div *ngIf="p['confirmPassword'].errors['passwordMismatch']">Le password non corrispondono</div>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-secondary" [disabled]="loading">
+              <span *ngIf="loading" class="spinner"></span>
+              Cambia password
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

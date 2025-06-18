@@ -1,0 +1,102 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Registrati</h1>
+      <p>Crea un nuovo account</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="nome">Nome e Cognome</label>
+        <input 
+          type="text" 
+          id="nome" 
+          formControlName="nome" 
+          class="form-control"
+          [ngClass]="{ 'is-invalid': (submitted || registerForm.get('nome')?.touched) && registerForm.get('nome')?.errors }"
+        >
+        <div *ngIf="(submitted || registerForm.get('nome')?.touched) && registerForm.get('nome')?.errors" class="error-message">
+          <div *ngIf="registerForm.get('nome')?.errors?.['required']">Il nome è obbligatorio</div>
+          <div *ngIf="registerForm.get('nome')?.errors?.['minlength']">Il nome deve avere almeno 2 caratteri</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          class="form-control"
+          [ngClass]="{ 'is-invalid': (submitted || registerForm.get('email')?.touched) && registerForm.get('email')?.errors }"
+        >
+        <div *ngIf="(submitted || registerForm.get('email')?.touched) && registerForm.get('email')?.errors" class="error-message">
+          <div *ngIf="registerForm.get('email')?.errors?.['required']">L'email è obbligatoria</div>
+          <div *ngIf="registerForm.get('email')?.errors?.['email']">Inserisci un'email valida</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          class="form-control"
+          [ngClass]="{ 'is-invalid': (submitted || registerForm.get('password')?.touched) && registerForm.get('password')?.errors }"
+        >
+        <div *ngIf="(submitted || registerForm.get('password')?.touched) && registerForm.get('password')?.errors" class="error-message">
+          <div *ngIf="registerForm.get('password')?.errors?.['required']">La password è obbligatoria</div>
+          <div *ngIf="registerForm.get('password')?.errors?.['minlength']">La password deve avere almeno 8 caratteri</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Conferma Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          formControlName="confirmPassword" 
+          class="form-control"
+          [ngClass]="{ 'is-invalid': (submitted || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors }"
+        >
+        <div *ngIf="(submitted || registerForm.get('confirmPassword')?.touched) && registerForm.get('confirmPassword')?.errors" class="error-message">
+          <div *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">La conferma password è obbligatoria</div>
+          <div *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">Le password non corrispondono</div>
+        </div>
+      </div>
+      
+      <div class="admin-code-toggle">
+        <a (click)="toggleAdminCode()" class="toggle-link">
+          {{ showAdminCode ? 'Nascondi opzioni admin' : 'Sei un amministratore?' }}
+        </a>
+      </div>
+
+      <div *ngIf="showAdminCode" class="form-group">
+        <label for="admin_code">Codice Amministratore</label>
+        <input 
+          type="password" 
+          id="admin_code" 
+          formControlName="admin_code" 
+          class="form-control"
+        >
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="registerForm.invalid || loading">
+          <span *ngIf="!loading">Registrati</span>
+          <span *ngIf="loading" class="spinner"></span>
+        </button>
+      </div>
+      
+      <div class="auth-links">
+        <p>Hai già un account? <a routerLink="/login">Accedi</a></p>
+      </div>
+    </form>
+  </div>
+</div>

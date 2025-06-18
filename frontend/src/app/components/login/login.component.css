@@ -1,0 +1,133 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  background-color: #f5f7fa;
+  padding: 20px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+}
+
+.alert {
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  /* Rimuovi eventuali margini laterali che potrebbero spingere verso destra */
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.form-actions {
+  margin-top: 30px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+input {
+  width: 100%; /* Assicura che l'input occupi il 100% della larghezza disponibile */
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box; /* Importante per assicurarsi che padding non estenda la larghezza */
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff5a5f;
+  box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.1);
+}
+
+/* Stile per il pulsante */
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff5a5f;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+.btn-login:hover {
+    background-color: #ff4146;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+}
+
+.btn-login:disabled {
+  background-color: #ffb5b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+/* Stile per i link in fondo */
+.login-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.forgot-link {
+  display: block;
+  color: #ff5a5f;
+  text-decoration: none;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+.forgot-link:hover {
+  text-decoration: underline;
+}
+.register-text {
+  margin: 0;
+  color: #444;
+  font-size: 14px;
+}
+
+.register-text a {
+  color: #ff5a5f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}

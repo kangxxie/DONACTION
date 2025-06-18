@@ -1,0 +1,128 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Dashboard Amministrazione</h1>
+    <p>Panoramica delle attività e statistiche</p>
+  </div>
+  
+  <div class="loading-spinner" *ngIf="loading">
+    Caricamento dati...
+  </div>
+  
+  <div class="dashboard-content" *ngIf="!loading">
+    <!-- Statistiche principali -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon users-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-data">
+          <h3>{{ stats.totalUsers }}</h3>
+          <p>Utenti registrati</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon campaigns-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="stat-data">
+          <h3>{{ stats.totalCampaigns }}</h3>
+          <p>Campagne attive</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon donations-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+            <line x1="1" y1="10" x2="23" y2="10"></line>
+          </svg>
+        </div>
+        <div class="stat-data">
+          <h3>{{ stats.totalDonations }}</h3>
+          <p>Donazioni totali</p>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon amount-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <div class="stat-data">
+          <h3>€{{ stats.totalAmount.toFixed(2) }}</h3>
+          <p>Fondi raccolti</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Links rapidi -->
+    <div class="quick-links">
+      <h2>Gestione amministrativa</h2>
+      <div class="links-grid">
+        <a routerLink="/admin/campaigns" class="quick-link">
+          <div class="link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <div class="link-text">
+            <h3>Gestione Campagne</h3>
+            <p>Crea, modifica ed elimina campagne</p>
+          </div>
+        </a>
+        
+        <a routerLink="/admin/users" class="quick-link">
+          <div class="link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="link-text">
+            <h3>Gestione Utenti</h3>
+            <p>Visualizza e gestisci gli utenti</p>
+          </div>
+        </a>
+        
+        <a routerLink="/admin/donations" class="quick-link">
+          <div class="link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="link-text">
+            <h3>Registro Donazioni</h3>
+            <p>Monitora tutte le transazioni</p>
+          </div>
+        </a>
+        
+        <a routerLink="/admin/settings" class="quick-link">
+          <div class="link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <div class="link-text">
+            <h3>Impostazioni</h3>
+            <p>Configura il sito</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

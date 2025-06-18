@@ -1,0 +1,52 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Accesso Amministratore</h1>
+      <p>Inserisci le credenziali amministratore</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+        >
+        <div *ngIf="submitted && f['email'].errors" class="error-message">
+          <div *ngIf="f['email'].errors['required']">Email richiesta</div>
+          <div *ngIf="f['email'].errors['email']">Inserisci un'email valida</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+        >
+        <div *ngIf="submitted && f['password'].errors" class="error-message">
+          <div *ngIf="f['password'].errors['required']">Password richiesta</div>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+
+      <div class="form-actions">
+        <button [disabled]="loading" class="btn btn-primary">
+          <span *ngIf="loading" class="spinner"></span>
+          Accedi come Amministratore
+        </button>
+      </div>
+      
+      <div class="auth-links">
+        <p>Torna al <a routerLink="/login">login standard</a></p>
+      </div>
+    </form>
+  </div>
+</div>
