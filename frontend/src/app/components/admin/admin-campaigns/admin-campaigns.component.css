@@ -1,0 +1,116 @@
+.admin-campaigns {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 300px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background-color: #357ae8;
+}
+
+.campaigns-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.campaigns-table th, 
+.campaigns-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.campaigns-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.campaigns-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.active {
+  background-color: #34a853;
+}
+
+.inactive {
+  background-color: #ea4335;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  color: #4285f4;
+  cursor: pointer;
+}
+
+.btn-delete {
+  color: #ea4335;
+  cursor: pointer;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #4285f4;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.error-message {
+  color: #ea4335;
+  padding: 15px;
+  background-color: #fde8e7;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}

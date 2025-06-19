@@ -1,28 +1,559 @@
+/* Base layout */
 .dashboard-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
-  padding-bottom: 40px;
+  background-color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Header with gradient background */
 .dashboard-header {
-  background-color: #ff5a5f;
+  background: linear-gradient(135deg, #ff5a5f 0%, #ff7a5f 100%);
   color: white;
-  padding: 40px 20px;
+  padding: 50px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.welcome-message {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+/* Main content layout */
+.dashboard-content {
+  max-width: 700px;
+  margin: -30px auto 0;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* User profile card */
+.user-profile-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 0;
+  margin-bottom: 25px;
+  overflow: hidden;
   text-align: center;
 }
 
-.dashboar/* filepath: c:\Users\hibab\Desktop\DONACTION\frontend\src\app\components\user-dashboard\user-dashboard.component.css */
-.dashboard-container {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  padding-bottom: 40px;
+.avatar-container {
+  padding: 25px 0;
+  display: flex;
+  justify-content: center;
 }
 
-.dashboard-header {
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
   background-color: #ff5a5f;
   color: white;
-  padding: 40px 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(255, 90, 95, 0.3);
+  animation: pulseAvatar 2s infinite ease-in-out;
+}
+
+@keyframes pulseAvatar {
+  0% {
+    box-shadow: 0 3px 10px rgba(255, 90, 95, 0.3);
+  }
+  50% {
+    box-shadow: 0 3px 15px rgba(255, 90, 95, 0.5);
+  }
+  100% {
+    box-shadow: 0 3px 10px rgba(255, 90, 95, 0.3);
+  }
+}
+
+/* Tab navigation */
+.tab-navigation {
+  display: flex;
+  border-top: 1px solid #f0f0f0;
+  position: relative; /* Aggiunto per posizionamento relativo */
+}
+
+.tab-item {
+  flex: 1;
   text-align: center;
+  padding: 15px 10px;
+  border-right: 1px solid #f0f0f0;
+  transition: all 0.3s ease; /* Transizione più fluida */
+  position: relative;
+}
+
+.tab-item:last-child {
+  border-right: none;
+}
+
+.tab-item a {
+  color: #777;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  transition: color 0.3s ease;
+}
+
+.tab-item.active {
+  background-color: #fff2f2;
+}
+
+.tab-item.active a {
+  color: #ff5a5f;
+}
+
+.tab-item:hover {
+  background-color: #fffafa;
+}
+
+.tab-item:hover a {
+  color: #ff5a5f;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #ff5a5f;
+  transform: scaleX(0.8);
+  transition: transform 0.3s ease;
+}
+
+.tab-item.active:hover::after {
+  transform: scaleX(1);
+}
+
+.tab-item.logout a {
+  color: #ff5a5f;
+  cursor: pointer;
+}
+
+/* Main content area */
+.dashboard-main {
+  width: 100%;
+  background-color: #fff;
+}
+
+.donation-section {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.section-header {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.section-header h2 {
+  margin: 0 0 5px;
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.section-description {
+  color: #666;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Stats cards */
+.donation-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f0f0f0;
+  text-align: center;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Thank you message */
+.thanks-message {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  margin: 20px 0 30px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.thanks-icon {
+  color: #ff5a5f;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.thanks-text {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Table styling */
+.donation-table-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.table-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.table-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.donation-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  background-color: #f8f9fa;
+  color: #666;
+  font-weight: 500;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 2px solid #eee;
+}
+
+tbody td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.campaign-name {
+  font-weight: 500;
+}
+
+td.amount {
+  font-weight: 600;
+  color: #ff5a5f;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 30px 0;
+  color: #888;
+}
+
+.empty-state i {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+/* Buttons and actions */
+.actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  gap: 8px;
+}
+
+.btn-primary {
+  background-color: #ff5a5f;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #f15a29;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(255, 90, 95, 0.3);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid #ff5a5f;
+  color: #ff5a5f;
+}
+
+.btn-secondary:hover {
+  background-color: #fff5f5;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #666;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.btn-outline:hover {
+  background-color: #f8f8f8;
+}
+
+/* Animation classes */
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+  animation-delay: 0s; /* Ridotto il delay */
+}
+
+.animate-fade-in-left {
+  opacity: 0;
+  animation: fadeInLeft 0.5s ease-out forwards;
+  animation-delay: 0.1s; /* Ridotto il delay */
+}
+
+.animate-fade-in-right {
+  opacity: 0;
+  animation: fadeInRight 0.5s ease-out forwards;
+  animation-delay: 0.1s; /* Ridotto il delay */
+}
+
+.animate-slide-up {
+  opacity: 0;
+  animation: slideUp 0.5s ease-out forwards;
+  animation-delay: 0.1s; /* Ridotto il delay */
+}
+
+.animate-pop {
+  opacity: 0;
+  animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.2s; /* Aggiunto delay specifico */
+}
+
+.animate-slide-in {
+  opacity: 0;
+  animation: slideIn 0.4s ease-out forwards;
+  animation-delay: 0.2s; /* Aggiunto delay specifico */
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+  animation-delay: 0.5s;
+}
+
+.animate-pulse-hover:hover {
+  animation: pulse 1s infinite;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px); /* Ridotta la distanza */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px); /* Ridotta la distanza */
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px); /* Ridotta la distanza */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9); /* Meno drammatico */
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.03); /* Leggero overshoot */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Counter animation */
+.counter {
+  display: inline-block;
+  position: relative;
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .dashboard-content {
+    flex-direction: column;
+  }
+  
+  .dashboard-sidebar {
+    flex: 0 0 auto;
+    width: 100%;
+    position: static;
+  }
+  
+  .user-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .profile-avatar {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .avatar-placeholder {
+    margin: 0 auto;
+  }
+  
+  .sidebar-menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .sidebar-menu li {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 40px 20px 80px;
+  }
+  
+  .donation-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+  }
 }
 
 

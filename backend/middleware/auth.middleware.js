@@ -1,26 +1,40 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'donaction-jwt-secret-key';
+const User = require('../models/user.model');
+require('dotenv').config();
 
-exports.verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  
-  if (!token) {
-    return res.status(401).json({ message: 'Token non fornito' });
-  }
-  
+exports.authenticateToken = async (req, res, next) => {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Accesso negato. Token non fornito.' });
+    }
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+    
+    if (!user) {
+      return res.status(403).json({ message: 'Utente non trovato.' });
+    }
+    
+    req.user = user;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Token non valido' });
+    return res.status(403).json({ message: 'Token non valido o scaduto.' });
   }
 };
 
-exports.isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+exports.authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Accesso non autorizzato.' });
+    }
+    
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Non hai i permessi per accedere a questa risorsa.' });
+    }
+    
     next();
-  } else {
-    return res.status(403).json({ message: 'Accesso riservato agli amministratori' });
-  }
+  };
 };

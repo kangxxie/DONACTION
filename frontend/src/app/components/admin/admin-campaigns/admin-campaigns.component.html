@@ -1,0 +1,51 @@
+<div class="admin-campaigns">
+  <div class="header">
+    <h1>Gestione Campagne</h1>
+    <a routerLink="/admin/campaigns/new" class="btn-primary">+ Nuova Campagna</a>
+  </div>
+
+  <div class="search-box">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Cerca campagne..." />
+  </div>
+
+  <div class="error-message" *ngIf="error">{{ error }}</div>
+
+  <div class="loading-indicator" *ngIf="loading">
+    Caricamento campagne in corso...
+  </div>
+
+  <table class="campaigns-table" *ngIf="!loading && filteredCampaigns.length > 0">
+    <thead>
+      <tr>
+        <th>Titolo</th>
+        <th>Categoria</th>
+        <th>Obiettivo</th>
+        <th>Raccolto</th>
+        <th>Progresso</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let campaign of filteredCampaigns">
+        <td>{{ campaign.title }}</td>
+        <td>{{ campaign.category }}</td>
+        <td>€{{ campaign.goal.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</td>
+        <td>€{{ campaign.collected.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</td>
+        <td>
+          <div>{{ (campaign.collected / campaign.goal * 100).toFixed(1) }}%</div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="(campaign.collected / campaign.goal * 100)"></div>
+          </div>
+        </td>
+        <td class="actions">
+          <a [routerLink]="['/admin/campaigns/edit', campaign.id]" class="btn-edit">Modifica</a>
+          <span *ngIf="isAdmin" class="btn-delete" (click)="deleteCampaign(campaign.id)">Elimina</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && filteredCampaigns.length === 0" class="no-data">
+    <p>Nessuna campagna trovata.</p>
+  </div>
+</div>

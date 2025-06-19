@@ -1,170 +1,223 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const db = require('../config/db');
+const User = require('../models/user.model');
+const PasswordReset = require('../models/password-reset.model');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
-// Costanti di configurazione
-const JWT_SECRET = process.env.JWT_SECRET || 'donaction-jwt-secret-key';
-const JWT_EXPIRES_IN = '24h';
-
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Query per trovare l'utente e il suo ruolo in un'unica operazione con JOIN
-    const sql = `
-      SELECT u.*, r.nome_ruolo 
-      FROM Utente u 
-      JOIN Ruolo r ON u.id_ruolo = r.id_ruolo 
-      WHERE u.email = ?
-    `;
-    
-    const [users] = await db.execute(sql, [email]);
-    
-    if (users.length === 0) {
-      return res.status(401).json({ message: 'Email o password non validi' });
-    }
-    
-    const user = users[0];
-    
-    // Verifica password
-    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Email o password non validi' });
-    }
-    
-    // Crea JWT con informazioni utente e ruolo
-    const token = jwt.sign(
-      { 
-        userId: user.id_utente, 
-        email: user.email, 
-        role: user.nome_ruolo  // Inserisce il ruolo nel token
-      }, 
-      JWT_SECRET, 
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-    
-    // Risposta con token e informazioni utente (esclusa password)
-    res.json({
-      token,
-      user: {
-        id: user.id_utente,
-        name: user.nome,
-        email: user.email,
-        role: user.nome_ruolo
-      }
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Errore durante il login' });
+// Configurazione di nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
+});
+
+// Genera token JWT
+const generateToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '1h'
+  });
 };
 
-// Endpoint dedicato per login admin
-exports.adminLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Query con filtro sul ruolo admin
-    const sql = `
-      SELECT u.*, r.nome_ruolo 
-      FROM Utente u 
-      JOIN Ruolo r ON u.id_ruolo = r.id_ruolo 
-      WHERE u.email = ? AND r.nome_ruolo = 'admin'
-    `;
-    
-    const [users] = await db.execute(sql, [email]);
-    
-    if (users.length === 0) {
-      return res.status(401).json({ message: 'Accesso non autorizzato' });
-    }
-    
-    // Resto della logica uguale al login normale...
-    const user = users[0];
-    
-    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Email o password non validi' });
-    }
-    
-    const token = jwt.sign(
-      { userId: user.id_utente, email: user.email, role: user.nome_ruolo }, 
-      JWT_SECRET, 
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-    
-    res.json({
-      token,
-      user: {
-        id: user.id_utente,
-        name: user.nome,
-        email: user.email,
-        role: user.nome_ruolo
-      }
-    });
-  } catch (error) {
-    console.error('Admin login error:', error);
-    res.status(500).json({ message: 'Errore durante il login admin' });
-  }
-};
-
-// Registrazione con codice admin opzionale
+// Registrazione utente
 exports.register = async (req, res) => {
-  const { nome, email, password, admin_code } = req.body;
-  
   try {
-    // Verifica se l'email è già registrata
-    const [existingUsers] = await db.execute(
-      'SELECT * FROM Utente WHERE email = ?',
-      [email]
-    );
+    const { name, email, password, admin_code } = req.body;
     
-    if (existingUsers.length > 0) {
-      return res.status(400).json({ message: 'Email già registrata' });
+    // Verifica se l'utente esiste già
+    const existingUser = await User.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email già registrata.' });
     }
     
-    // Determina il ruolo in base al codice admin
-    let roleId = 2; // Default: utente registrato
-    
-    if (admin_code && admin_code === process.env.ADMIN_SECRET_CODE) {
-      roleId = 1; // Admin
+    // Determina il ruolo dell'utente
+    let role = 'registered';
+    if (admin_code === process.env.ADMIN_CODE) {
+      role = 'admin';
     }
     
-    // Hash della password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // Crea nuovo utente
+    const newUser = await User.create({ name, email, password, role });
     
-    // Inserimento nuovo utente
-    const [result] = await db.execute(
-      'INSERT INTO Utente (nome, email, password_hash, id_ruolo) VALUES (?, ?, ?, ?)',
-      [nome, email, hashedPassword, roleId]
-    );
-    
-    // Ottieni il ruolo per includerlo nel token
-    const [roles] = await db.execute(
-      'SELECT nome_ruolo FROM Ruolo WHERE id_ruolo = ?',
-      [roleId]
-    );
-    
-    const role = roles[0].nome_ruolo;
-    
-    // Crea il JWT
-    const token = jwt.sign(
-      { userId: result.insertId, email: email, role: role }, 
-      JWT_SECRET, 
-      { expiresIn: JWT_EXPIRES_IN }
-    );
+    // Genera token JWT
+    const token = generateToken(newUser.id);
     
     res.status(201).json({
-      message: 'Utente registrato con successo',
+      message: 'Utente registrato con successo.',
       token,
       user: {
-        id: result.insertId,
-        name: nome,
-        email: email,
-        role: role
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role
       }
     });
   } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Errore durante la registrazione' });
+    console.error('Errore nella registrazione:', error);
+    res.status(500).json({ message: 'Errore durante la registrazione.' });
+  }
+};
+
+// Login utente
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Verifica se l'utente esiste
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(401).json({ message: 'Email o password non validi.' });
+    }
+    
+    // Verifica la password
+    const isPasswordValid = await User.verifyPassword(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Email o password non validi.' });
+    }
+    
+    // Genera token JWT
+    const token = generateToken(user.id);
+    
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Errore nel login:', error);
+    res.status(500).json({ message: 'Errore durante il login.' });
+  }
+};
+
+// Login admin
+exports.adminLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Verifica se l'utente esiste
+    const user = await User.findByEmail(email);
+    if (!user || user.role !== 'admin') {
+      return res.status(401).json({ message: 'Accesso admin non autorizzato.' });
+    }
+    
+    // Verifica la password
+    const isPasswordValid = await User.verifyPassword(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Email o password non validi.' });
+    }
+    
+    // Genera token JWT
+    const token = generateToken(user.id);
+    
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Errore nel login admin:', error);
+    res.status(500).json({ message: 'Errore durante il login admin.' });
+  }
+};
+
+// Richiesta reset password
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Verifica se l'utente esiste
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'Utente non trovato.' });
+    }
+    
+    // Genera token di reset
+    const resetToken = await PasswordReset.createToken(user.id);
+    
+    // Invia email con token
+    const resetUrl = `http://localhost:4200/reset-password/${resetToken}`;
+    
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: 'Reset Password - DONACTION',
+      html: `
+        <h1>Reset della tua password</h1>
+        <p>Hai richiesto il reset della password. Clicca sul link seguente per reimpostare la password:</p>
+        <a href="${resetUrl}" target="_blank">Reset Password</a>
+        <p>Il link scadrà tra un'ora.</p>
+        <p>Se non hai richiesto il reset della password, ignora questa email.</p>
+      `
+    };
+    
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Errore nell\'invio dell\'email:', error);
+        return res.status(500).json({ message: 'Errore nell\'invio dell\'email di reset.' });
+      }
+      res.json({ message: 'Email per il reset della password inviata.' });
+    });
+  } catch (error) {
+    console.error('Errore nella richiesta di reset password:', error);
+    res.status(500).json({ message: 'Errore durante la richiesta di reset password.' });
+  }
+};
+
+// Verifica token reset
+exports.verifyResetToken = async (req, res) => {
+  try {
+    const { token } = req.params;
+    
+    const resetRecord = await PasswordReset.findByToken(token);
+    if (!resetRecord) {
+      return res.status(400).json({ message: 'Token di reset non valido o scaduto.' });
+    }
+    
+    res.json({ valid: true });
+  } catch (error) {
+    console.error('Errore nella verifica del token:', error);
+    res.status(500).json({ message: 'Errore durante la verifica del token di reset.' });
+  }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    
+    const resetRecord = await PasswordReset.findByToken(token);
+    if (!resetRecord) {
+      return res.status(400).json({ message: 'Token di reset non valido o scaduto.' });
+    }
+    
+    // Aggiorna la password dell'utente
+    await User.updatePassword(resetRecord.user_id, newPassword);
+    
+    // Elimina il token di reset
+    await PasswordReset.deleteToken(token);
+    
+    res.json({ message: 'Password aggiornata con successo.' });
+  } catch (error) {
+    console.error('Errore nel reset della password:', error);
+    res.status(500).json({ message: 'Errore durante il reset della password.' });
+  }
+};
+
+// Ottieni informazioni utente corrente
+exports.getCurrentUser = async (req, res) => {
+  try {
+    res.json({ user: req.user });
+  } catch (error) {
+    console.error('Errore nel recupero dell\'utente corrente:', error);
+    res.status(500).json({ message: 'Errore durante il recupero dell\'utente corrente.' });
   }
 };

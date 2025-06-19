@@ -1,0 +1,91 @@
+import { Component, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID, ElementRef } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-navbar',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.css'
+})
+export class NavbarComponent implements OnInit, OnDestroy {
+  isLoggedIn = false;
+  isAdmin = false;
+  isTeam = false;
+  userName = '';
+  isDropdownOpen = false;
+  isNavDropdownOpen = false;
+  
+  private authSubscription?: Subscription;
+  
+  constructor(
+    private authService: AuthService,
+    private elementRef: ElementRef,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
+  ngOnInit() {
+    // Subscribe to authentication state
+    this.authSubscription = this.authService.currentUser.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.isAdmin = user?.role === 'admin';
+      this.isTeam = user?.role === 'team';
+      this.userName = user?.name || '';
+    });
+    
+    // Initialize states
+    this.isDropdownOpen = false;
+    this.isNavDropdownOpen = false;
+  }
+
+  ngOnDestroy() {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
+  
+  logout() {
+    this.authService.logout();
+  }
+
+  // Toggle dropdown menu
+  toggleDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+  
+  // Toggle navigation dropdown (per mobile)
+  toggleNavDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isNavDropdownOpen = !this.isNavDropdownOpen;
+  }
+  
+  // Prevent clicks inside navbar from closing the menu
+  @HostListener('click', ['$event'])
+  onClick(event: Event): void {
+    event.stopPropagation();
+  }
+  
+  // Close dropdown when clicking outside
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    if (this.isDropdownOpen) {
+      this.isDropdownOpen = false;
+    }
+    if (this.isNavDropdownOpen) {
+      this.isNavDropdownOpen = false;
+    }
+  }
+  
+  // Check for screen size changes
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    // Close il dropdown di navigazione se lo schermo diventa desktop
+    if (isPlatformBrowser(this.platformId) && window.innerWidth > 768) {
+      this.isNavDropdownOpen = false;
+    }
+  }
+}

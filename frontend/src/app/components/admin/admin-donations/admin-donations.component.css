@@ -1,0 +1,140 @@
+.admin-donations {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-container {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 300px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.status-filter select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.btn-export {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-export:hover {
+  background-color: #357ae8;
+}
+
+.donations-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.donations-table th, 
+.donations-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.donations-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.donations-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-completed {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.status-pending {
+  background-color: #fef7e0;
+  color: #ea8600;
+}
+
+.status-failed {
+  background-color: #fce8e6;
+  color: #c53929;
+}
+
+.amount {
+  font-weight: 600;
+}
+
+.summary-panel {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.summary-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.summary-content {
+  display: flex;
+  gap: 30px;
+}
+
+.summary-item {
+  flex: 1;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.summary-value {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.error-message {
+  color: #ea4335;
+  padding: 15px;
+  background-color: #fde8e7;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}

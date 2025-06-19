@@ -1,49 +1,56 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
-    <h1>Dashboard Personale</h1>
-    <p class="welcome-message">Benvenuto/a, <strong>{{ currentUser?.nome }}</strong>!</p>
+    <div class="header-content animate-fade-in">
+      <h1>Dashboard Personale</h1>
+      <p class="welcome-message animate-slide-up">Benvenuto/a<span *ngIf="currentUser?.nome">, <strong>{{ currentUser?.nome }}</strong></span>!</p>
+    </div>
   </div>
   
   <div class="dashboard-content">
-    <div class="dashboard-sidebar">
-      <div class="user-profile">
-        <div class="profile-avatar">
-          <!-- Avatar dell'utente o iniziali -->
-          <div class="avatar-placeholder">
-            {{ currentUser?.nome.substring(0, 1) }}
-          </div>
-        </div>
-        <div class="profile-info">
-          <h3>{{ currentUser?.nome }}</h3>
-          <p>{{ currentUser?.email }}</p>
+    <div class="user-profile-card animate-fade-in">
+      <div class="avatar-container">
+        <div class="avatar-placeholder">
+          {{ currentUser?.nome?.substring(0, 1) || 'U' }}
         </div>
       </div>
-      
-      <div class="sidebar-menu">
-        <ul>
-          <li class="active"><a href="#donations">Le mie donazioni</a></li>
-          <li><a href="#settings">Impostazioni account</a></li>
-          <li><a (click)="logout()" class="logout-link">Logout</a></li>
-        </ul>
+        <div class="tab-navigation">
+        <div class="tab-item active">
+          <a href="#donations">Le mie donazioni</a>
+        </div>
+        <div class="tab-item">
+          <a href="#settings">Impostazioni</a>
+        </div>
+        <div class="tab-item logout">
+          <a (click)="logout()">Logout</a>
+        </div>
       </div>
     </div>
-    
-    <div class="dashboard-main">
-      <div class="donation-history">
-        <h2>Le tue donazioni</h2>
-        
-        <div class="donation-stats">
-          <div class="stat-card">
-            <div class="stat-value">{{ userDonations.length }}</div>
-            <div class="stat-label">Donazioni totali</div>
+      <div class="dashboard-main animate-fade-in">
+      <div class="donation-section" id="donations">
+        <div class="section-header">
+          <h2>Le tue donazioni</h2>
+          <p class="section-description">Grazie per il tuo contributo a un mondo migliore!</p>
+        </div>
+          <div class="donation-stats">
+          <div class="stat-card animate-pop">
+            <div class="stat-content">
+              <div class="stat-value">{{ userDonations.length }}</div>
+              <div class="stat-label">Donazioni totali</div>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-value">{{ userDonations.reduce((sum, d) => sum + d.amount, 0) }}€</div>
-            <div class="stat-label">Importo totale</div>
+          <div class="stat-card animate-pop">
+            <div class="stat-content">
+              <div class="stat-value">{{ totalDonationAmount }}€</div>
+              <div class="stat-label">Importo totale</div>
+            </div>
           </div>
         </div>
         
-        <div class="donation-table">
+        <div class="thanks-message animate-pop">
+          <div class="thanks-icon">❤</div>
+          <div class="thanks-text">Grazie!</div>
+        </div>
+          <div class="donation-table-container animate-fade-in">
           <table>
             <thead>
               <tr>
@@ -53,20 +60,26 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let donation of userDonations">
+              <tr *ngFor="let donation of userDonations; let i = index">
                 <td>{{ donation.date | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ donation.campaignName }}</td>
                 <td class="amount">{{ donation.amount }}€</td>
               </tr>
               <tr *ngIf="userDonations.length === 0">
-                <td colspan="3" class="no-data">Non hai ancora effettuato donazioni</td>
+                <td colspan="3" class="no-data">
+                  <div class="empty-state">
+                    Non hai ancora effettuato donazioni
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
         
         <div class="actions">
-          <a routerLink="/campaigns" class="btn btn-primary">Scopri nuove campagne</a>
+          <a routerLink="/campaigns" class="btn btn-primary">
+            Scopri nuove campagne
+          </a>
         </div>
       </div>
     </div>

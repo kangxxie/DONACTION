@@ -1,21 +1,40 @@
-// routes/campaign.routes.js
 const express = require('express');
 const router = express.Router();
-const campaignCtrl = require('../controllers/campaign.controller');
+const campaignController = require('../controllers/campaign.controller');
+const authMiddleware = require('../middleware/auth.middleware');
 
-// GET /api/campaigns
-router.get('/', campaignCtrl.getAllCampaigns);
+// Ottieni tutte le campagne (pubblico)
+router.get('/', campaignController.getAllCampaigns);
 
-// GET /api/campaigns/:id
-router.get('/:id', campaignCtrl.getCampaignById);
+// Ottieni una campagna specifica (pubblico)
+router.get('/:id', campaignController.getCampaignById);
 
-// POST /api/campaigns
-router.post('/', campaignCtrl.createCampaign);
+// Crea una nuova campagna (solo team e admin)
+router.post('/', 
+  authMiddleware.authenticateToken, 
+  authMiddleware.authorizeRoles('team', 'admin'), 
+  campaignController.createCampaign
+);
 
-// PUT /api/campaigns/:id
-router.put('/:id', campaignCtrl.updateCampaign);
+// Aggiorna una campagna (solo team e admin)
+router.put('/:id', 
+  authMiddleware.authenticateToken, 
+  authMiddleware.authorizeRoles('team', 'admin'), 
+  campaignController.updateCampaign
+);
 
-// DELETE /api/campaigns/:id
-router.delete('/:id', campaignCtrl.deleteCampaign);
+// Elimina una campagna (solo team e admin)
+router.delete('/:id', 
+  authMiddleware.authenticateToken, 
+  authMiddleware.authorizeRoles('team', 'admin'), 
+  campaignController.deleteCampaign
+);
+
+// Ottieni le campagne create dall'utente corrente (solo team e admin)
+router.get('/user/my-campaigns', 
+  authMiddleware.authenticateToken, 
+  authMiddleware.authorizeRoles('team', 'admin'), 
+  campaignController.getCampaignsByUser
+);
 
 module.exports = router;

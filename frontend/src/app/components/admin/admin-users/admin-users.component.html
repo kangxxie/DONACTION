@@ -1,0 +1,83 @@
+<div class="admin-users">
+  <div class="header">
+    <h1>Gestione Utenti</h1>
+  </div>
+
+  <div class="filter-container">
+    <div class="search-box">
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Cerca utenti..." />
+    </div>
+    <div class="role-filter">
+      <select [(ngModel)]="selectedRole">
+        <option value="all">Tutti i ruoli</option>
+        <option value="admin">Admin</option>
+        <option value="team">Team</option>
+        <option value="registered">Registrato</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="error">{{ error }}</div>
+
+  <div class="loading-indicator" *ngIf="loading">
+    Caricamento utenti in corso...
+  </div>
+
+  <table class="users-table" *ngIf="!loading && filteredUsers.length > 0">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ruolo</th>
+        <th>Registrato il</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <!-- Utente in modalità modifica -->
+        <ng-container *ngIf="editingUser && editingUser.id === user.id">
+          <td><input type="text" [(ngModel)]="editingUser.name" class="edit-field" /></td>
+          <td><input type="email" [(ngModel)]="editingUser.email" class="edit-field" /></td>
+          <td>
+            <select [(ngModel)]="editingUser.role" class="edit-select">
+              <option value="registered">Registrato</option>
+              <option value="team">Team</option>
+              <option value="admin">Admin</option>
+            </select>
+          </td>
+          <td>{{ user.created_at | date: 'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <span class="btn-save" (click)="saveEdit()">Salva</span>
+            <span class="btn-cancel" (click)="cancelEdit()">Annulla</span>
+          </td>
+        </ng-container>
+
+        <!-- Utente in modalità visualizzazione -->
+        <ng-container *ngIf="!editingUser || editingUser.id !== user.id">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="role-badge" 
+                  [ngClass]="{
+                    'role-admin': user.role === 'admin',
+                    'role-team': user.role === 'team',
+                    'role-registered': user.role === 'registered'
+                  }">
+              {{ user.role }}
+            </span>
+          </td>
+          <td>{{ user.created_at | date: 'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <span class="btn-edit" (click)="startEdit(user)">Modifica</span>
+            <span class="btn-delete" (click)="deleteUser(user.id)">Elimina</span>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && filteredUsers.length === 0" class="no-data">
+    <p>Nessun utente trovato.</p>
+  </div>
+</div>

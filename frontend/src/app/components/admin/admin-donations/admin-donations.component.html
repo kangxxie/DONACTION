@@ -1,0 +1,76 @@
+<div class="admin-donations">
+  <div class="header">
+    <h1>Registro Donazioni</h1>
+    <button class="btn-export" (click)="exportCSV()">Esporta CSV</button>
+  </div>
+
+  <div class="filter-container">
+    <div class="search-box">
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Cerca donazioni..." />
+    </div>
+    <div class="status-filter">
+      <select [(ngModel)]="statusFilter">
+        <option value="all">Tutti gli stati</option>
+        <option value="completed">Completate</option>
+        <option value="pending">In attesa</option>
+        <option value="failed">Fallite</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="error">{{ error }}</div>
+
+  <div class="loading-indicator" *ngIf="loading">
+    Caricamento donazioni in corso...
+  </div>
+
+  <div class="summary-panel" *ngIf="!loading && filteredDonations.length > 0">
+    <div class="summary-title">Riepilogo</div>
+    <div class="summary-content">
+      <div class="summary-item">
+        <div class="summary-label">Numero totale di donazioni</div>
+        <div class="summary-value">{{ filteredDonations.length }}</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-label">Importo totale</div>
+        <div class="summary-value">€{{ totalAmount.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</div>
+      </div>
+    </div>
+  </div>
+
+  <table class="donations-table" *ngIf="!loading && filteredDonations.length > 0">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Campagna</th>
+        <th>Donatore</th>
+        <th>Importo</th>
+        <th>Metodo</th>
+        <th>Stato</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let donation of filteredDonations">
+        <td>{{ donation.donated_at | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ donation.campaign_title }}</td>
+        <td>{{ donation.donor_name }}</td>
+        <td class="amount">€{{ donation.amount.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</td>
+        <td>{{ donation.payment_method }}</td>
+        <td>
+          <span class="status-badge" 
+                [ngClass]="{
+                  'status-completed': donation.payment_status === 'completed',
+                  'status-pending': donation.payment_status === 'pending',
+                  'status-failed': donation.payment_status === 'failed'
+                }">
+            {{ donation.payment_status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && filteredDonations.length === 0" class="no-data">
+    <p>Nessuna donazione trovata.</p>
+  </div>
+</div>

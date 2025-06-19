@@ -1,60 +1,64 @@
-//definisce la tabella Campagne// models/campaign.model.js
-const db = require('../config/db');
+// models/campaign.model.js
+const pool = require('../config/db');
 
-const Campaign = {};
+class Campaign {
+  static async getAll() {
+    const [rows] = await pool.query(`
+      SELECT c.*, u.name as creator_name 
+      FROM campaigns c
+      LEFT JOIN users u ON c.created_by = u.id
+      ORDER BY c.created_at DESC
+    `);
+    return rows;
+  }
 
-// Crea tabella se non esiste
-Campaign.createTableIfNotExists = () => {
-  const sql = `
-    CREATE TABLE IF NOT EXISTS campaigns (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      title VARCHAR(255) NOT NULL,
-      description TEXT,
-      goal DECIMAL(10,2) NOT NULL,
-      collected DECIMAL(10,2) DEFAULT 0,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB;
-  `;
-  db.query(sql, (err) => {
-    if (err) console.error('Errore creazione tabella campaigns:', err);
-    else console.log('Tabella campaigns pronta');
-  });
-};
+  static async getById(id) {
+    const [rows] = await pool.query(`
+      SELECT c.*, u.name as creator_name 
+      FROM campaigns c
+      LEFT JOIN users u ON c.created_by = u.id
+      WHERE c.id = ?
+    `, [id]);
+    return rows[0];
+  }
 
-// Restituisce tutte le campagne
-Campaign.getAll = (callback) => {
-  db.query('SELECT * FROM campaigns', callback);
-};
+  static async create(campaignData) {
+    const { title, description, goal, imageUrl, category, created_by } = campaignData;
+    const [result] = await pool.query(
+      'INSERT INTO campaigns (title, description, goal, imageUrl, category, created_by) VALUES (?, ?, ?, ?, ?, ?)',
+      [title, description, goal, imageUrl, category, created_by]
+    );
+    return { id: result.insertId, ...campaignData, collected: 0 };
+  }
 
-// Restituisce 1 campagna per id
-Campaign.getById = (id, callback) => {
-  db.query('SELECT * FROM campaigns WHERE id = ?', [id], callback);
-};
+  static async update(id, campaignData) {
+    const { title, description, goal, imageUrl, category } = campaignData;
+    const [result] = await pool.query(
+      'UPDATE campaigns SET title = ?, description = ?, goal = ?, imageUrl = ?, category = ? WHERE id = ?',
+      [title, description, goal, imageUrl, category, id]
+    );
+    return result.affectedRows > 0;
+  }
 
-// Crea una nuova campagna
-Campaign.create = (data, callback) => {
-  const { title, description, goal } = data;
-  db.query(
-    'INSERT INTO campaigns (title, description, goal) VALUES (?, ?, ?)',
-    [title, description, goal],
-    callback
-  );
-};
+  static async delete(id) {
+    const [result] = await pool.query('DELETE FROM campaigns WHERE id = ?', [id]);
+    return result.affectedRows > 0;
+  }
 
-// Aggiorna campagna (es. collected, descrizione, obiettivo)
-Campaign.update = (id, data, callback) => {
-  // per semplicità, aggiorna solo titolo/descrizione/goal
-  const { title, description, goal } = data;
-  db.query(
-    'UPDATE campaigns SET title = ?, description = ?, goal = ? WHERE id = ?',
-    [title, description, goal, id],
-    callback
-  );
-};
+  static async updateCollectedAmount(id, amount) {
+    const [result] = await pool.query(
+      'UPDATE campaigns SET collected = collected + ? WHERE id = ?',
+      [amount, id]
+    );
+    return result.affectedRows > 0;
+  }
 
-// Elimina una campagna
-Campaign.delete = (id, callback) => {
-  db.query('DELETE FROM campaigns WHERE id = ?', [id], callback);
-};
+  static async getByCreatedBy(userId) {
+    const [rows] = await pool.query('SELECT * FROM campaigns WHERE created_by = ?', [userId]);
+    return rows;
+  }
+}
+
+module.exports = Campaign;
 
 module.exports = Campaign;

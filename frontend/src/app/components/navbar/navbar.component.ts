@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ElementRef, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
@@ -9,86 +9,90 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrl: './navbar.component.css'
 })
-export class NavbarComponent implements OnInit, OnDestroy {
-  isLoggedIn = false;
+export class NavbarComponent implements OnInit, OnDestroy {  isLoggedIn = false;
   isAdmin = false;
+  isTeam = false;
   userName = '';
-  isMenuOpen = false;
+  isNavDropdownOpen = false;
+  isDropdownOpen = false;
+  
   private authSubscription?: Subscription;
-  private documentClickListener: any;
-
+  
   constructor(
     private authService: AuthService,
-    private elementRef: ElementRef
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
-
   ngOnInit() {
-    // Sottoscrizione allo stato di autenticazione
+    // Subscribe to authentication state
     this.authSubscription = this.authService.currentUser.subscribe(user => {
       this.isLoggedIn = !!user;
       this.isAdmin = user?.role === 'admin';
+      this.isTeam = user?.role === 'team';
       this.userName = user?.name || '';
     });
+    
+    // Initialize dropdown states
+    this.isNavDropdownOpen = false;
+    this.isDropdownOpen = false;
   }
 
   ngOnDestroy() {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
-    // Rimuovi eventuali listener rimasti
-    this.removeDocumentClickListener();
   }
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-    
-    if (this.isMenuOpen) {
-      // Aggiungi listener per i click esterni quando il menu è aperto
-      this.addDocumentClickListener();
-    } else {
-      // Rimuovi il listener quando il menu viene chiuso manualmente
-      this.removeDocumentClickListener();
-    }
-  }
-
-  closeMenu() {
-    if (this.isMenuOpen) {
-      this.isMenuOpen = false;
-      this.removeDocumentClickListener();
-    }
-  }
-
-  logout() {
+    logout() {
     this.authService.logout();
-    this.isMenuOpen = false;
   }
-
-  // Impedisci che i click all'interno della navbar chiudano il menu
+  
+  // Toggle user dropdown menu
+  toggleDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isDropdownOpen = !this.isDropdownOpen;
+    
+    if (this.isNavDropdownOpen && this.isDropdownOpen) {
+      this.isNavDropdownOpen = false;
+    }
+  }
+  
+  // Toggle navigation dropdown (per mobile)
+  toggleNavDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isNavDropdownOpen = !this.isNavDropdownOpen;
+    
+    if (this.isDropdownOpen && this.isNavDropdownOpen) {
+      this.isDropdownOpen = false;
+    }
+  }  // Close mobile navigation dropdown
+  closeNavDropdown(): void {
+    this.isNavDropdownOpen = false;
+  }
+  
+  // Close user dropdown
+  closeDropdown(): void {
+    this.isDropdownOpen = false;
+  }
+  
+  // Close dropdowns when clicking outside
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    this.isNavDropdownOpen = false;
+    this.isDropdownOpen = false;
+  }
+  
+  // Prevent clicks inside navbar from closing dropdown
   @HostListener('click', ['$event'])
   onClick(event: Event): void {
     event.stopPropagation();
   }
-
-  // Gestione dei click esterni
-  private addDocumentClickListener(): void {
-    // Uso setTimeout per evitare che lo stesso click che apre il menu lo chiuda immediatamente
-    setTimeout(() => {
-      this.documentClickListener = (event: MouseEvent) => {
-        const clickedInsideNavbar = this.elementRef.nativeElement.contains(event.target);
-        if (!clickedInsideNavbar && this.isMenuOpen) {
-          this.closeMenu();
-        }
-      };
-      document.addEventListener('click', this.documentClickListener);
-    }, 0);
-  }
-
-  private removeDocumentClickListener(): void {
-    if (this.documentClickListener) {
-      document.removeEventListener('click', this.documentClickListener);
-      this.documentClickListener = null;
+  
+  // Close dropdowns if window is resized to desktop
+  @HostListener('window:resize', ['$event'])
+  onResize(): void {
+    if (isPlatformBrowser(this.platformId) && window.innerWidth > 768) {
+      this.isNavDropdownOpen = false;
     }
   }
 }

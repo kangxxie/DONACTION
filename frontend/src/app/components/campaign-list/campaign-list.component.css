@@ -313,6 +313,7 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   backface-visibility: hidden;
+  height: 100%;
 }
 
 .campaign-card:hover {
@@ -411,6 +412,8 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.6;
+  min-height: 80px; /* Assicura che la descrizione abbia un'altezza minima */
+  max-height: 80px; /* Limita l'altezza massima per evitare overflow */
 }
 
 .campaign-progress {

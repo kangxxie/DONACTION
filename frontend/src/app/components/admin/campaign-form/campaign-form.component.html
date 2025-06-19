@@ -1,0 +1,57 @@
+<div class="campaign-form">
+  <div class="form-header">
+    <h1>{{ isEditing ? 'Modifica Campagna' : 'Crea Nuova Campagna' }}</h1>
+    <p>{{ isEditing ? 'Modifica i dettagli della campagna esistente' : 'Inserisci i dettagli per la nuova campagna' }}</p>
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+
+  <div class="loading-indicator" *ngIf="loading && isEditing">
+    Caricamento dati della campagna...
+  </div>
+
+  <form (ngSubmit)="saveCampaign()" *ngIf="!loading || !isEditing">
+    <div class="form-group">
+      <label for="title">Titolo *</label>
+      <input type="text" id="title" name="title" [(ngModel)]="campaign.title" required>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Categoria *</label>
+      <select id="category" name="category" [(ngModel)]="campaign.category" required>
+        <option value="" disabled>Seleziona una categoria</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descrizione *</label>
+      <textarea id="description" name="description" [(ngModel)]="campaign.description" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="goal">Obiettivo (€) *</label>
+      <input type="number" id="goal" name="goal" [(ngModel)]="campaign.goal" min="1" required>
+    </div>
+
+    <div class="form-group" *ngIf="isEditing">
+      <label for="collected">Raccolto (€)</label>
+      <input type="number" id="collected" name="collected" [(ngModel)]="campaign.collected" min="0">
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">URL Immagine</label>
+      <input type="text" id="imageUrl" name="imageUrl" [(ngModel)]="campaign.imageUrl" 
+             placeholder="es. /assets/nome-immagine.jpg">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="loading">
+        {{ isEditing ? 'Aggiorna Campagna' : 'Crea Campagna' }}
+        <span *ngIf="loading" class="loading-indicator">Salvataggio in corso...</span>
+      </button>
+      <a routerLink="/admin/campaigns" class="btn-secondary">Annulla</a>
+    </div>
+  </form>
+</div>

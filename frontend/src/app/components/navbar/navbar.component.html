@@ -1,5 +1,6 @@
 <nav class="navbar">
   <div class="navbar-container">
+    <!-- Logo -->
     <div class="navbar-logo">
       <a routerLink="/">
         <span class="logo-icon">❤</span>
@@ -9,79 +10,74 @@
       </a>
     </div>
     
-   <!-- Toggle per menu mobile -->
-    <div class="mobile-menu-toggle" [class.active]="isMenuOpen" (click)="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+    <!-- Desktop Navigation -->
+    <div class="desktop-nav">
+      <div class="nav-links">
+        <a routerLink="/campaigns" class="nav-item" routerLinkActive="active">Campagne</a>
+        <a routerLink="/about" class="nav-item" routerLinkActive="active">Chi Siamo</a>
+        <a routerLink="/contact" class="nav-item" routerLinkActive="active">Contatti</a>
+      </div>
     </div>
-
-    <!-- Menu principale -->
-    <div class="navbar-menu" [class.active]="isMenuOpen">
-      <!-- Link sempre visibili -->
-      <div class="navbar-start">
-        <a routerLink="/campaigns" class="navbar-item" routerLinkActive="active" (click)="closeMenu()">Campagne</a>
-        <a routerLink="/about" class="navbar-item" routerLinkActive="active" (click)="closeMenu()">Chi Siamo</a>
-        <a routerLink="/contact" class="navbar-item" routerLinkActive="active" (click)="closeMenu()">Contatti</a>
+    
+    <!-- Mobile Navigation Dropdown -->
+    <div class="mobile-nav">
+      <button class="mobile-dropdown-button" (click)="toggleNavDropdown($event)" [class.active]="isNavDropdownOpen">
+        <i class="fas fa-bars"></i>
+      </button>      <div class="mobile-dropdown-menu" [class.show]="isNavDropdownOpen">
+        <a routerLink="/campaigns" class="dropdown-item" routerLinkActive="active" (click)="closeNavDropdown()">Campagne</a>
+        <a routerLink="/about" class="dropdown-item" routerLinkActive="active" (click)="closeNavDropdown()">Chi Siamo</a>
+        <a routerLink="/contact" class="dropdown-item" routerLinkActive="active" (click)="closeNavDropdown()">Contatti</a>
       </div>
-
-      <!-- Link condizionali in base all'autenticazione -->
-      <div class="navbar-end">
-        <!-- Utente non autenticato - SOLO PULSANTE ACCEDI -->
-        <ng-container *ngIf="!isLoggedIn">
-          <a routerLink="/login" class="navbar-item signup-btn" routerLinkActive="active" (click)="closeMenu()">Accedi</a>
-        </ng-container>
-
-        <!-- Utente autenticato -->
-        <ng-container *ngIf="isLoggedIn">
-          <!-- Menu admin -->
-          <ng-container *ngIf="isAdmin">
-            <a routerLink="/admin/dashboard" class="navbar-item dashboard-link" routerLinkActive="active" (click)="closeMenu()">
-              <span class="icon">
-                <i class="fas fa-chart-line"></i>
-              </span>
-              <span>Dashboard</span>
-            </a>
-          </ng-container>
-
-          <!-- Menu utente standard -->
-          <ng-container *ngIf="!isAdmin">
-            <a routerLink="/profile" class="navbar-item profile-link" routerLinkActive="active" (click)="closeMenu()">
-              <span class="icon">
-                <i class="fas fa-user-circle"></i>
-              </span>
-              <span>Area Riservata</span>
-            </a>
-          </ng-container>
-
-          <!-- Dropdown utente (per entrambi) -->
-          <div class="navbar-dropdown-container">
-            <button class="navbar-dropdown-trigger">
-              <span class="user-avatar">{{ userName.charAt(0) }}</span>
-              <span class="user-name">{{ userName }}</span>
-              <span class="icon">
-                <i class="fas fa-chevron-down"></i>
-              </span>
-            </button>
-            <div class="navbar-dropdown">
-              <a routerLink="/profile" class="dropdown-item">Il Mio Profilo</a>
+    </div>
+    
+    <!-- Auth Section -->
+    <div class="auth-section">
+      <!-- Non-authenticated user -->
+      <ng-container *ngIf="!isLoggedIn">
+        <a routerLink="/login" class="login-btn">
+          <span class="desktop-text">Accedi</span>
+          <i class="fas fa-sign-in-alt mobile-icon"></i>
+        </a>
+      </ng-container>
+        <!-- Authenticated user -->
+      <ng-container *ngIf="isLoggedIn">
+        <div class="user-dropdown">
+          <button class="user-dropdown-trigger" (click)="toggleDropdown($event)">
+            <span class="user-avatar desktop-display">{{ userName.charAt(0) }}</span>
+            <span class="user-name desktop-display">{{ userName }}</span>
+            <i class="fas fa-user mobile-icon"></i>
+          </button>          <div class="user-dropdown-menu" [class.show]="isDropdownOpen">
+            <a routerLink="/dashboard" class="dropdown-item" (click)="closeDropdown()">Dashboard Personale</a>
+            <a routerLink="/profile" class="dropdown-item" (click)="closeDropdown()">Il Mio Profilo</a>
+            
+            <!-- Admin/Team options -->
+            <ng-container *ngIf="isAdmin || isTeam">
+              <div class="dropdown-divider"></div>
+              <a routerLink="/admin/dashboard" class="dropdown-item" (click)="closeDropdown()">Dashboard Admin</a>
+              <a routerLink="/admin/campaigns" class="dropdown-item" (click)="closeDropdown()">Gestione Campagne</a>
+              <a routerLink="/admin/campaigns/new" class="dropdown-item" (click)="closeDropdown()">Nuova Campagna</a>
+              
+              <!-- Admin-only options -->
               <ng-container *ngIf="isAdmin">
-                <a routerLink="/admin/dashboard" class="dropdown-item">Dashboard</a>
+                <a routerLink="/admin/users" class="dropdown-item" (click)="closeDropdown()">Gestione Utenti</a>
+                <a routerLink="/admin/donations" class="dropdown-item" (click)="closeDropdown()">Registro Donazioni</a>
               </ng-container>
-              <hr class="dropdown-divider">
-              <a (click)="logout()" class="dropdown-item logout-item">
-                <span class="icon">
-                  <i class="fas fa-sign-out-alt"></i>
-                </span>
-                <span>Logout</span>
-              </a>
-            </div>
+            </ng-container>
+            
+            <div class="dropdown-divider"></div>
+            <a (click)="logout(); closeDropdown()" class="dropdown-item logout-item">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </a>
           </div>
-
-          <!-- Bottone Dona ora -->
-          <a routerLink="/donate" class="navbar-item donate-btn" routerLinkActive="active">Dona Ora</a>
-        </ng-container>
-      </div>
+        </div>
+        
+        <!-- Donate button (only on desktop) -->
+        <a routerLink="/donate" class="donate-btn desktop-display">
+          <span class="donate-icon">❤</span>
+          <span>Dona Ora</span>
+        </a>
+      </ng-container>
     </div>
   </div>
 </nav>

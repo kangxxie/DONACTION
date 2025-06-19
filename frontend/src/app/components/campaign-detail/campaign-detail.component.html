@@ -1,10 +1,116 @@
-<div *ngIf="campaign">
-  <h2>{{ campaign.title }}</h2>
-  <p>{{ campaign.description }}</p>
-  <p>Obiettivo: {{ campaign.goal }}€</p>
-  <p>Raccolto: {{ campaign.collected }}€</p>
-  <button (click)="goToDonate()">Dona ora</button>
-</div>
-<div *ngIf="!campaign">
-  <p>Caricamento campagna...</p>
+<div class="campaign-detail">
+  <div class="loading-indicator" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Caricamento dettagli campagna...</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">{{ error }}</div>
+
+  <div class="campaign-content" *ngIf="campaign && !loading">
+    <div class="campaign-header">
+      <div class="header-content">
+        <h1>{{ campaign.title }}</h1>
+        <div class="campaign-category">
+          <span class="category-badge">{{ campaign.category }}</span>
+        </div>
+      </div>
+      
+      <!-- Admin actions -->
+      <div class="admin-actions" *ngIf="isAdmin || isTeam">
+        <button class="btn-edit" (click)="editCampaign()">
+          <i class="fas fa-edit"></i> Modifica Campagna
+        </button>
+      </div>
+    </div>
+
+    <div class="campaign-main">
+      <div class="campaign-image-container">
+        <div class="campaign-image" *ngIf="campaign.imageUrl">
+          <img [src]="campaign.imageUrl" [alt]="campaign.title">
+        </div>
+
+        <div class="campaign-share">
+          <h3>Condividi questa campagna</h3>
+          <div class="share-buttons">
+            <button class="share-btn facebook" (click)="shareOnFacebook()">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+            <button class="share-btn twitter" (click)="shareOnTwitter()">
+              <i class="fab fa-twitter"></i>
+            </button>
+            <button class="share-btn whatsapp" (click)="shareOnWhatsApp()">
+              <i class="fab fa-whatsapp"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="campaign-details">
+        <div class="campaign-stats-card">
+          <div class="campaign-stats">
+            <div class="stats-item">
+              <div class="stats-value">€{{ campaign.collected.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</div>
+              <div class="stats-label">raccolti su €{{ campaign.goal.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</div>
+            </div>
+            <div class="stats-item">
+              <div class="stats-value">{{ getProgressPercentage().toFixed(1) }}%</div>
+              <div class="stats-label">completato</div>
+            </div>
+            <div class="stats-item">
+              <div class="stats-value">{{ getDaysLeft() }}</div>
+              <div class="stats-label">giorni rimasti</div>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+            </div>
+          </div>
+
+          <div class="campaign-actions">
+            <button class="btn-donate" (click)="goToDonate()">
+              <i class="fas fa-heart"></i> Dona Ora
+            </button>
+          </div>
+        </div>
+
+        <div class="campaign-description">
+          <h2>Descrizione</h2>
+          <p>{{ campaign.description }}</p>
+        </div>
+
+        <!-- Donazioni recenti -->
+        <div class="recent-donations">
+          <h2>Donazioni Recenti</h2>
+          
+          <div class="loading-donations" *ngIf="loadingDonations">
+            <div class="spinner-small"></div>
+            <p>Caricamento donazioni...</p>
+          </div>
+
+          <div class="donations-list" *ngIf="!loadingDonations && recentDonations.length > 0">
+            <div class="donation-item" *ngFor="let donation of recentDonations">
+              <div class="donation-avatar">{{ donation.donor_name ? donation.donor_name.charAt(0) : 'A' }}</div>
+              <div class="donation-info">
+                <div class="donation-name">{{ donation.donor_name || 'Donatore Anonimo' }}</div>
+                <div class="donation-amount">€{{ donation.amount.toLocaleString('it-IT', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</div>
+                <div class="donation-date" *ngIf="donation.donated_at">{{ donation.donated_at | date:'dd/MM/yyyy' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="no-donations" *ngIf="!loadingDonations && recentDonations.length === 0">
+            <p>Nessuna donazione ancora. Sii il primo a contribuire!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="campaign-footer">
+      <a routerLink="/campaigns" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Torna alle Campagne
+      </a>
+    </div>
+  </div>
 </div>

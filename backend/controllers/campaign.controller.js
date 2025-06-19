@@ -1,49 +1,133 @@
 // controllers/campaign.controller.js
 const Campaign = require('../models/campaign.model');
+const Donation = require('../models/donation.model');
 
-// All’avvio, assicurati che la tabella esista
-Campaign.createTableIfNotExists();
-
-exports.getAllCampaigns = (req, res) => {
-  Campaign.getAll((err, results) => {
-    if (err) return res.status(500).json({ message: err });
-    res.json(results);
-  });
-};
-
-exports.getCampaignById = (req, res) => {
-  const id = req.params.id;
-  Campaign.getById(id, (err, results) => {
-    if (err) return res.status(500).json({ message: err });
-    if (results.length === 0) return res.status(404).json({ message: 'Campagna non trovata' });
-    res.json(results[0]);
-  });
-};
-
-exports.createCampaign = (req, res) => {
-  const data = req.body;
-  if (!data.title || !data.goal) {
-    return res.status(400).json({ message: 'Titolo e obiettivo sono obbligatori' });
+// Ottieni tutte le campagne
+exports.getAllCampaigns = async (req, res) => {
+  try {
+    const campaigns = await Campaign.getAll();
+    res.json(campaigns);
+  } catch (error) {
+    console.error('Errore nel recupero delle campagne:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle campagne.' });
   }
-  Campaign.create(data, (err, result) => {
-    if (err) return res.status(500).json({ message: err });
-    res.status(201).json({ id: result.insertId, ...data });
-  });
 };
 
-exports.updateCampaign = (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
-  Campaign.update(id, data, (err) => {
-    if (err) return res.status(500).json({ message: err });
-    res.json({ message: 'Campagna aggiornata' });
-  });
+// Ottieni una campagna specifica
+exports.getCampaignById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const campaign = await Campaign.getById(id);
+    
+    if (!campaign) {
+      return res.status(404).json({ message: 'Campagna non trovata.' });
+    }
+    
+    res.json(campaign);
+  } catch (error) {
+    console.error('Errore nel recupero della campagna:', error);
+    res.status(500).json({ message: 'Errore durante il recupero della campagna.' });
+  }
 };
 
-exports.deleteCampaign = (req, res) => {
-  const id = req.params.id;
-  Campaign.delete(id, (err) => {
-    if (err) return res.status(500).json({ message: err });
-    res.json({ message: 'Campagna eliminata' });
-  });
+// Crea una nuova campagna
+exports.createCampaign = async (req, res) => {
+  try {
+    const { title, description, goal, imageUrl, category } = req.body;
+    
+    // Assicura che solo gli utenti 'team' o 'admin' possano creare campagne
+    if (req.user.role !== 'team' && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Non hai i permessi per creare campagne.' });
+    }
+    
+    const newCampaign = await Campaign.create({
+      title,
+      description,
+      goal,
+      imageUrl,
+      category,
+      created_by: req.user.id
+    });
+    
+    res.status(201).json(newCampaign);
+  } catch (error) {
+    console.error('Errore nella creazione della campagna:', error);
+    res.status(500).json({ message: 'Errore durante la creazione della campagna.' });
+  }
+};
+
+// Aggiorna una campagna
+exports.updateCampaign = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, goal, imageUrl, category } = req.body;
+    
+    // Verifica se la campagna esiste
+    const campaign = await Campaign.getById(id);
+    if (!campaign) {
+      return res.status(404).json({ message: 'Campagna non trovata.' });
+    }
+    
+    // Verifica i permessi: un membro del team può modificare solo le sue campagne, un admin può modificare tutte
+    if (req.user.role === 'team' && campaign.created_by !== req.user.id) {
+      return res.status(403).json({ message: 'Non hai i permessi per modificare questa campagna.' });
+    }
+    
+    const updated = await Campaign.update(id, {
+      title,
+      description,
+      goal,
+      imageUrl,
+      category
+    });
+    
+    if (!updated) {
+      return res.status(500).json({ message: 'Impossibile aggiornare la campagna.' });
+    }
+    
+    res.json({ message: 'Campagna aggiornata con successo.' });
+  } catch (error) {
+    console.error('Errore nell\'aggiornamento della campagna:', error);
+    res.status(500).json({ message: 'Errore durante l\'aggiornamento della campagna.' });
+  }
+};
+
+// Elimina una campagna
+exports.deleteCampaign = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Verifica se la campagna esiste
+    const campaign = await Campaign.getById(id);
+    if (!campaign) {
+      return res.status(404).json({ message: 'Campagna non trovata.' });
+    }
+    
+    // Verifica i permessi: un membro del team può eliminare solo le sue campagne, un admin può eliminare tutte
+    if (req.user.role === 'team' && campaign.created_by !== req.user.id) {
+      return res.status(403).json({ message: 'Non hai i permessi per eliminare questa campagna.' });
+    }
+    
+    const deleted = await Campaign.delete(id);
+    
+    if (!deleted) {
+      return res.status(500).json({ message: 'Impossibile eliminare la campagna.' });
+    }
+    
+    res.json({ message: 'Campagna eliminata con successo.' });
+  } catch (error) {
+    console.error('Errore nell\'eliminazione della campagna:', error);
+    res.status(500).json({ message: 'Errore durante l\'eliminazione della campagna.' });
+  }
+};
+
+// Ottieni le campagne create da un utente
+exports.getCampaignsByUser = async (req, res) => {
+  try {
+    const campaigns = await Campaign.getByCreatedBy(req.user.id);
+    res.json(campaigns);
+  } catch (error) {
+    console.error('Errore nel recupero delle campagne dell\'utente:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle campagne dell\'utente.' });
+  }
 };
