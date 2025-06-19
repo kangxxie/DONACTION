@@ -32,14 +32,22 @@
           <span *ngIf="loginForm.get('password')?.errors?.['minlength']">La password deve avere almeno 6 caratteri</span>
         </div>
       </div>
-      
+      <!-- Mostra il pulsante solo quando il form è valido -->
+      <div *ngIf="formValid" class="submit-button-container">
       <button 
         type="submit" 
         class="btn-login" 
-        [disabled]="loginForm.invalid || loading">
+        [ngClass]="{'loading': loading}"
+        >
         <span *ngIf="!loading">Accedi</span>
-        <span *ngIf="loading">Caricamento...</span>
+        <span *ngIf="loading" class="spinner"></span>
       </button>
+      </div>
+      <!-- Mostra un messaggio altrimenti -->
+      <div *ngIf="!formValid" class="validation-message">
+        Compila tutti i campi per procedere
+      </div>
+      
       
       <!-- Link semplificati simili al form di registrazione -->
       <div class="login-footer">

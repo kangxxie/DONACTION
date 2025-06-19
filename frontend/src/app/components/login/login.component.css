@@ -104,6 +104,8 @@ input:focus {
   color: #dc3545;
   font-size: 14px;
   margin-top: 5px;
+  text-align: center;
+  align-items: center;
 }
 
 .forgot-link {
@@ -130,4 +132,25 @@ input:focus {
 
 .register-text a:hover {
   text-decoration: underline;
+}
+
+.validation-message {
+  text-align: center;
+  color: #888;
+  background-color: #f8f8f8;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 15px 0;
+  font-size: 0.9em;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s ease-in-out infinite;
+  margin: 0 auto;
 }

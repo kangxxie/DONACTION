@@ -16,16 +16,28 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted = false;
   error = '';
+  errorMessage = '';
   showAdminCode = false;
+  
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    this.registerForm = this.fb.group({
+    nome: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: ['', Validators.required],
+    admin_code: [''] // Nessun validatore, quindi è opzionale
+  }, {
+    validators: this.passwordMatchValidator
+  });
+  }
 
   ngOnInit() {
-    this.registerForm = this.formBuilder.group({
+    this.registerForm = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -40,29 +52,43 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(['/']);
     }
   }
+  get formValid(): boolean {
+  const form = this.registerForm;
+  
+  // Verifica i campi obbligatori
+  const nomeValid = form.get('nome')?.valid;
+  const emailValid = form.get('email')?.valid;
+  const passwordValid = form.get('password')?.valid;
+  const confirmPasswordValid = form.get('confirmPassword')?.valid;
+  
+  // Verifica che le password corrispondano
+  const passwordsMatch = form.get('password')?.value === form.get('confirmPassword')?.value;
+  
+  // Il form è valido se tutti i campi obbligatori sono validi E le password corrispondono
+  // Il campo admin_code NON influisce sulla validità del form
+  return !!(nomeValid && emailValid && passwordValid && confirmPasswordValid && passwordsMatch);
+}
 
   // Validatore personalizzato per verificare la corrispondenza delle password
   passwordMatchValidator(formGroup: FormGroup) {
-    const password = formGroup.get('password')?.value;
-    const confirmPassword = formGroup.get('confirmPassword')?.value;
-
-    if (password !== confirmPassword) {
-      formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    } else {
-      // Manteniamo altri errori che potrebbero essere presenti
-      const errors = formGroup.get('confirmPassword')?.errors;
-      if (errors && Object.keys(errors).filter(key => key !== 'passwordMismatch').length) {
-        // Se ci sono altri errori oltre a passwordMismatch, li manteniamo
-        const newErrors = { ...errors };
-        delete newErrors['passwordMismatch'];
-        formGroup.get('confirmPassword')?.setErrors(newErrors);
-      } else {
-        formGroup.get('confirmPassword')?.setErrors(null);
-      }
-      return null;
+  const password = formGroup.get('password')?.value;
+  const confirmPassword = formGroup.get('confirmPassword')?.value;
+  
+  if (password !== confirmPassword) {
+    formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
+    return { passwordMismatch: true };
+  } else {
+    // Importante: rimuove l'errore passwordMismatch se presente
+    const confirmPasswordControl = formGroup.get('confirmPassword');
+    if (confirmPasswordControl?.hasError('passwordMismatch')) {
+      // Mantiene gli altri errori se presenti
+      const errors = { ...confirmPasswordControl.errors };
+      delete errors['passwordMismatch'];
+      confirmPasswordControl.setErrors(Object.keys(errors).length ? errors : null);
     }
+    return null;
   }
+}
 
   get f() { return this.registerForm.controls; }
 

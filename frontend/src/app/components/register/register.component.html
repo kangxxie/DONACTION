@@ -84,16 +84,24 @@
 
       <div *ngIf="error" class="alert alert-danger">{{error}}</div>
 
-      <div class="form-actions">
-        <button 
-          type="submit" 
-          class="btn btn-primary"
-          [disabled]="registerForm.invalid || loading">
-          <span *ngIf="!loading">Registrati</span>
-          <span *ngIf="loading" class="spinner"></span>
-        </button>
-      </div>
       
+        <!-- Mostra il pulsante solo quando il form è valido -->
+        <div *ngIf="formValid" class="submit-button-container"> 
+          <button 
+            type="submit" 
+            class="btn-register"
+            [ngClass]="{'loading': loading}">
+            <span *ngIf="!loading">Registrati</span>
+            <span *ngIf="loading" class="spinner"></span>
+          </button>
+        </div>
+      
+      <div *ngIf="!formValid" class="validation-message">
+        Compila correttamente tutti i campi per procedere
+      </div>
+      <div *ngIf="errorMessage" class="server-error">
+      {{ errorMessage }}
+      </div>
       <div class="auth-links">
         <p>Hai già un account? <a routerLink="/login">Accedi</a></p>
       </div>

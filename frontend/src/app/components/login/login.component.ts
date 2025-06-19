@@ -21,17 +21,18 @@ export class LoginComponent implements OnInit {
   loading = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
+    });
+  }
 
   ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
 
     // Se già autenticato, reindirizza
     if (this.authService.isLoggedIn) {
@@ -40,6 +41,9 @@ export class LoginComponent implements OnInit {
     
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.passwordResetSuccess = this.route.snapshot.queryParams['passwordReset'] === 'true';
+  }
+  get formValid(): boolean {
+    return this.loginForm.valid;
   }
 
   onSubmit() {
