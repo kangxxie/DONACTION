@@ -65,12 +65,30 @@ export class CampaignListComponent implements OnInit {
   // Categories for filtering
   categories: string[] = ['Terremoti', 'Educazione', 'Ospedali', 'Ambiente', 'Fame', 'Rifugiati'];
 
+  // Default image to use when an image fails to load
+  defaultImagePath: string = 'assets/earthquake.png';
+
   constructor(private campaignService: CampaignService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCampaigns();
   }
 
+  // Function to safely get image URL
+  getSafeImageUrl(campaign: Campaign): string {
+    if (!campaign.imageUrl) {
+      return this.defaultImagePath;
+    }
+    return campaign.imageUrl;
+  }
+
+  // Function to handle image loading errors
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    console.log('Image loading error:', imgElement.src);
+    imgElement.src = this.defaultImagePath;
+    imgElement.onerror = null; // Prevent infinite loop
+  }
   loadCampaigns(): void {
     this.loading = true;
     this.campaignService.getAll().subscribe({
@@ -85,7 +103,7 @@ export class CampaignListComponent implements OnInit {
         console.error('Error loading campaigns:', error);
         
         // Load mock data for development
-
+        console.log('Loading mock campaign data');
         this.addMockCampaigns();
         this.applyFilters();
       }
@@ -164,8 +182,7 @@ export class CampaignListComponent implements OnInit {
     this.categoryFilter = 'all';
     this.applyFilters();
   }
-  
-  // Add mock campaigns for development
+    // Add mock campaigns for development
   private addMockCampaigns(): void {
     this.campaigns = [
       {
@@ -174,7 +191,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Supporta le famiglie colpite dal terremoto nel Centro Italia con cibo, riparo e assistenza medica.',
         goal: 50000,
         collected: 32600,
-        imageUrl: 'assets/earthquake.png',
+        imageUrl: '/assets/earthquake.png',
         category: 'Terremoti'
       },
       {
@@ -183,7 +200,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Finanzia programmi educativi per bambini provenienti da famiglie a basso reddito in tutta Italia.',
         goal: 25000,
         collected: 18750,
-        imageUrl: 'assets/education.png',
+        imageUrl: '/assets/education.png',
         category: 'Educazione'
       },
       {
@@ -192,7 +209,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Aiuta ad acquistare nuove attrezzature mediche per migliorare la diagnosi e il trattamento nei reparti pediatrici.',
         goal: 75000,
         collected: 42300,
-        imageUrl: 'assets/hospital.png',
+        imageUrl: '/assets/hospital.png',
         category: 'Ospedali'
       },
       {
@@ -201,7 +218,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Contribuisci alla pulizia delle spiagge italiane e alla protezione dell\'ecosistema marino.',
         goal: 15000,
         collected: 8200,
-        imageUrl: 'assets/environment.jpeg',
+        imageUrl: '/assets/environment.png',
         category: 'Ambiente'
       },
       {
@@ -210,7 +227,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Aiuta a fornire pasti caldi e nutrienti ai senzatetto nelle principali città italiane.',
         goal: 30000,
         collected: 21500,
-        imageUrl: 'assets/food.jpg',
+        imageUrl: '/assets/food.png',
         category: 'Fame'
       },
       {
@@ -219,7 +236,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Fornisci assistenza legale, medica e sociale ai rifugiati che arrivano in Italia.',
         goal: 45000,
         collected: 27300,
-        imageUrl: 'assets/refugees.jpg',
+        imageUrl: '/assets/refugees.png',
         category: 'Rifugiati'
       }
     ];

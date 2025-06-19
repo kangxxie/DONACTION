@@ -99,9 +99,8 @@
       
       <!-- Campaign Grid with Stagger Animation -->
       <div class="campaign-grid" @cardAnimation *ngIf="filteredCampaigns.length > 0 && !loading">
-        <div class="campaign-card" *ngFor="let campaign of filteredCampaigns">
-          <div class="campaign-image">
-            <img [src]="campaign.imageUrl || 'assets/default-campaign.jpg'" [alt]="campaign.title">
+        <div class="campaign-card" *ngFor="let campaign of filteredCampaigns">          <div class="campaign-image">
+            <img [src]="getSafeImageUrl(campaign)" [alt]="campaign.title" (error)="onImageError($event)">
             <div class="campaign-overlay">
               <button class="btn-view-details" [routerLink]="['/campaign', campaign.id]">Dettagli</button>
             </div>

@@ -329,6 +329,10 @@
   height: 220px;
   overflow: hidden;
   position: relative;
+  background-color: #f0f0f0; /* Default background color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .campaign-image img {
@@ -336,6 +340,15 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.7s ease;
+}
+
+/* Style for image error state */
+.campaign-image img.error {
+  opacity: 0.7;
+  object-fit: contain;
+  padding: 20px;
+  max-height: 80%;
+  max-width: 80%;
 }
 
 .campaign-card:hover .campaign-image img {

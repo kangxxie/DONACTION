@@ -115,8 +115,7 @@ export class HomeComponent implements OnInit {
     }
   });
 }
-  
-  // Metodo per aggiungere dati di esempio per lo sviluppo
+    // Metodo per aggiungere dati di esempio per lo sviluppo
   private addMockCampaigns(): void {
     this.campaigns = [
       {
@@ -125,7 +124,7 @@ export class HomeComponent implements OnInit {
         description: 'Supporta le famiglie colpite dal terremoto nel Centro Italia con cibo, riparo e assistenza medica.',
         goal: 50000,
         collected: 32600,
-        imageUrl: './assets/earthquake.png',
+        imageUrl: 'assets/earthquake.png',
         category: 'Terremoti'
       },
       {
@@ -134,7 +133,7 @@ export class HomeComponent implements OnInit {
         description: 'Finanzia programmi educativi per bambini provenienti da famiglie a basso reddito in tutta Italia.',
         goal: 25000,
         collected: 18750,
-        imageUrl: './assets/education.png',
+        imageUrl: 'assets/education.png',
         category: 'Educazione'
       },
       {
@@ -143,7 +142,7 @@ export class HomeComponent implements OnInit {
         description: 'Aiuta ad acquistare nuove attrezzature mediche per migliorare la diagnosi e il trattamento nei reparti pediatrici.',
         goal: 75000,
         collected: 42300,
-        imageUrl: './assets/hospital.png',
+        imageUrl: 'assets/hospital.png',
         category: 'Ospedali'
       }
     ];
