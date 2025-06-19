@@ -1,7 +1,10 @@
 .campaign-list-page {
   padding-bottom: 60px;
-  overflow-x: hidden; /* Cambia da 'overflow: hidden' a 'overflow-x: hidden' */
+  overflow: hidden; /* Previene sia l'overflow verticale che orizzontale durante le transizioni */
   width: 100%;
+  position: relative;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* Hero Banner with Animation */
@@ -68,7 +71,8 @@
   padding: 0 20px;
   width: 100%;
   box-sizing: border-box; /* Assicurati che il padding sia incluso nella larghezza */
-  overflow-x: hidden; /* Previene lo scroll orizzontale */
+  overflow: visible; /* Consente agli elementi di essere visibili ma previene lo scroll */
+  position: relative;
 }
 
 /* Filters Section with Enhanced Style */
@@ -410,6 +414,7 @@
   margin-bottom: 25px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.6;

@@ -17,12 +17,11 @@ import {
   imports: [CommonModule, RouterModule],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.css'],
-  animations: [
-    // Hero animation
+  animations: [    // Hero animation - standardizzata con la pagina campagne
     trigger('heroAnimation', [
       transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(20px)' }),
-        animate('0.8s ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        style({ opacity: 0 }),
+        animate('0.8s ease-out', style({ opacity: 1 }))
       ])
     ]),
     // Mission section animation

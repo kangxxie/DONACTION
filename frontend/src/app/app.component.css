@@ -1,0 +1,31 @@
+/* Main app container styles */
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  position: relative;
+}
+
+main {
+  width: 100%;
+  position: relative;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Handle router outlet transitions */
+router-outlet + * {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

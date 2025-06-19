@@ -229,6 +229,9 @@
 
 .custom-amount {
   margin-top: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .input-with-icon {
@@ -251,6 +254,9 @@
   border-radius: 10px;
   font-size: 1.1rem;
   transition: all 0.3s ease;
+  box-sizing: border-box; /* Include padding e bordo nelle dimensioni */
+  overflow: hidden; /* Nasconde il contenuto che fuoriesce */
+  text-overflow: ellipsis; /* Aggiunge i puntini se il testo è troppo lungo */
 }
 
 .custom-amount input:focus, 
@@ -313,10 +319,15 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  width: 100%; /* Assicura che la riga occupi tutta la larghezza disponibile */
+  box-sizing: border-box; /* Include padding e bordi nelle dimensioni */
+  margin-bottom: 0; /* Rimuove il margine inferiore extra */
 }
 
 .form-group {
   margin-bottom: 20px;
+  width: 100%; /* Assicura che ogni gruppo di form occupi il 100% della sua cella */
+  box-sizing: border-box; /* Include padding e bordi nelle dimensioni */
 }
 
 .form-group label {
@@ -334,6 +345,8 @@
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  box-sizing: border-box; /* Include padding e bordi nelle dimensioni */
+  max-width: 100%; /* Previene il debordamento */
 }
 
 .form-group input:focus,
