@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { Campaign } from '../../models/campaign.model';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { CampaignService } from '../../services/campaign.service';
 import { 
   trigger, 
@@ -62,8 +64,8 @@ export class CampaignListComponent implements OnInit {
   
   // Categories for filtering
   categories: string[] = ['Terremoti', 'Educazione', 'Ospedali', 'Ambiente', 'Fame', 'Rifugiati'];
-  
-  constructor(private campaignService: CampaignService) {}
+
+  constructor(private campaignService: CampaignService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCampaigns();
@@ -131,6 +133,21 @@ export class CampaignListComponent implements OnInit {
   
   onSearchChange(): void {
     this.applyFilters();
+  }
+  onDonateClick(campaignId: number): void {
+    // Verifica se l'utente è autenticato
+    if (this.authService.isAuthenticated()) {
+      // Utente autenticato - vai al form di donazione
+      this.router.navigate(['/donate', campaignId]);
+    } else {
+      // Utente non autenticato - vai alla pagina di login
+      this.router.navigate(['/login'], { 
+        queryParams: { 
+          redirect: `/donate/${campaignId}`, 
+          campaign: campaignId 
+        } 
+      });
+    }
   }
   
   onSortChange(): void {

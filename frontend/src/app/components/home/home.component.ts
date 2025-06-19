@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { Campaign } from '../../models/campaign.model';
 import { CampaignService } from '../../services/campaign.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { take } from 'rxjs/operators';
 import { 
   trigger, 
   state, 
@@ -71,7 +73,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -97,8 +100,21 @@ export class HomeComponent implements OnInit {
   }
 
   donate(campaignId: number): void {
-    this.router.navigate(['/donate', campaignId]);
-  }
+  this.authService.currentUser.pipe(take(1)).subscribe(user => {
+    if (user) {
+      // Utente autenticato - vai direttamente alla pagina di donazione
+      this.router.navigate(['/donate', campaignId]);
+    } else {
+      // Utente non autenticato - reindirizza al login con parametri per redirect
+      this.router.navigate(['/login'], { 
+        queryParams: { 
+          redirect: `/donate/${campaignId}`, 
+          campaign: campaignId.toString() 
+        } 
+      });
+    }
+  });
+}
   
   // Metodo per aggiungere dati di esempio per lo sviluppo
   private addMockCampaigns(): void {

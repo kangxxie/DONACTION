@@ -126,7 +126,7 @@
                 </div>
               </div>
             </div>
-            <button class="btn-donate" [routerLink]="['/campaign', campaign.id]">
+            <button class="btn-donate" (click)="onDonateClick(campaign.id)">
               <span class="btn-text">Dona Ora </span>
               <span class="btn-icon">❤</span>
             </button>

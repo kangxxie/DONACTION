@@ -180,6 +180,7 @@ section {
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   backface-visibility: hidden;
+  height: 100%; /* Importante: assicura che ogni card abbia la stessa altezza */
 }
 
 .campaign-card:hover {
@@ -278,6 +279,8 @@ section {
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.6;
+  min-height: 80px; /* Imposta un'altezza minima per la descrizione */
+  max-height: 80px; /* Impedisce che la descrizione si estenda oltre i 3 paragrafi */
 }
 
 .campaign-progress {

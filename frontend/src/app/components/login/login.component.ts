@@ -19,6 +19,10 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   returnUrl: string = '/';
   loading = false;
+  redirectUrl: string = '';
+  campaignId: string | null = null;
+  error = '';
+  
 
   constructor(
     private fb: FormBuilder,
@@ -38,7 +42,10 @@ export class LoginComponent implements OnInit {
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/']);
     }
-    
+    this.route.queryParams.subscribe(params => {
+      this.redirectUrl = params['redirect'] || '/dashboard';
+      this.campaignId = params['campaign'] || null;
+    });
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.passwordResetSuccess = this.route.snapshot.queryParams['passwordReset'] === 'true';
   }
@@ -53,6 +60,8 @@ export class LoginComponent implements OnInit {
 
     this.isSubmitting = true;
     this.errorMessage = '';
+    this.loading = true;
+    this.error = '';
     
     this.authService.login(
       this.loginForm.get('email')?.value,
@@ -60,6 +69,7 @@ export class LoginComponent implements OnInit {
     ).subscribe({
       next: () => {
         this.router.navigate([this.returnUrl]);
+        this.router.navigateByUrl(this.redirectUrl);
       },
       error: (error) => {
         this.errorMessage = error.error?.message || 'Errore di autenticazione';

@@ -102,7 +102,9 @@ export class AuthService {
         })
       );
   }
-  
+  isAuthenticated(): boolean {
+    return !!this.currentUserSubject.value;
+  }
   register(userData: { nome: string, email: string, password: string, admin_code?: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData)
       .pipe(
