@@ -1,116 +1,209 @@
 .admin-campaigns {
-  padding: 20px;
+  padding: 30px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 100px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
 }
 
 .search-box {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .search-box input {
-  width: 300px;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #e74c3c;
+  box-shadow: 0 3px 8px rgba(231, 76, 60, 0.15);
 }
 
 .btn-primary {
-  background-color: #4285f4;
+  background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 12px 20px;
+  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
-  background-color: #357ae8;
+  background-color: #d63c2e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .campaigns-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-top: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .campaigns-table th, 
 .campaigns-table td {
-  padding: 12px 15px;
+  padding: 16px 20px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+}
+
+.campaigns-table thead {
+  background-color: #f8f9fa;
 }
 
 .campaigns-table th {
-  background-color: #f8f9fa;
   font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #eee;
+}
+
+.campaigns-table td {
+  border-bottom: 1px solid #eee;
+}
+
+.campaigns-table tr:last-child td {
+  border-bottom: none;
 }
 
 .campaigns-table tr:hover {
-  background-color: #f5f5f5;
-}
-
-.status-indicator {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.active {
-  background-color: #34a853;
-}
-
-.inactive {
-  background-color: #ea4335;
+  background-color: #f9f9f9;
 }
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 12px;
+}
+
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-edit {
-  color: #4285f4;
-  cursor: pointer;
+  color: #fff;
+  background-color: #3498db;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-edit:hover {
+  background-color: #2980b9;
 }
 
 .btn-delete {
-  color: #ea4335;
-  cursor: pointer;
+  color: #fff;
+  background-color: #e74c3c;
+  border: none;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
 }
 
 .progress-bar {
-  height: 8px;
-  background-color: #e0e0e0;
-  border-radius: 4px;
+  height: 10px;
+  background-color: #ecf0f1;
+  border-radius: 5px;
   overflow: hidden;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .progress-fill {
   height: 100%;
-  background-color: #4285f4;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  border-radius: 5px;
 }
 
 .loading-indicator {
   text-align: center;
-  padding: 20px;
+  padding: 30px;
   color: #666;
+  font-size: 1.1rem;
 }
 
 .error-message {
-  color: #ea4335;
+  color: #e74c3c;
   padding: 15px;
   background-color: #fde8e7;
-  border-radius: 4px;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+  font-size: 1.1rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+@media (max-width: 992px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .search-box {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .campaigns-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-campaigns {
+    padding: 20px 10px;
+  }
 }

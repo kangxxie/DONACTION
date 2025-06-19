@@ -13,7 +13,6 @@
   <div class="loading-indicator" *ngIf="loading">
     Caricamento campagne in corso...
   </div>
-
   <table class="campaigns-table" *ngIf="!loading && filteredCampaigns.length > 0">
     <thead>
       <tr>
@@ -39,7 +38,7 @@
         </td>
         <td class="actions">
           <a [routerLink]="['/admin/campaigns/edit', campaign.id]" class="btn-edit">Modifica</a>
-          <span *ngIf="isAdmin" class="btn-delete" (click)="deleteCampaign(campaign.id)">Elimina</span>
+          <button *ngIf="isAdmin" class="btn-delete" (click)="deleteCampaign(campaign.id)">Elimina</button>
         </td>
       </tr>
     </tbody>
