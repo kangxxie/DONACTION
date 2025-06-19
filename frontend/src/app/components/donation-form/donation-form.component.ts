@@ -64,12 +64,9 @@ export class DonationFormComponent implements OnInit {
   // Current step in donation process
   currentStep = 1;
   totalSteps = 3;
-  
-  // Payment methods
+    // Payment methods - solo carta di credito/debito
   paymentMethods = [
-    { id: 'card', name: 'Carta di Credito/Debito', icon: 'credit-card' },
-    { id: 'paypal', name: 'PayPal', icon: 'paypal' },
-    { id: 'bank', name: 'Bonifico Bancario', icon: 'bank' }
+    { id: 'card', name: 'Carta di Credito/Debito', icon: 'credit-card' }
   ];
   selectedPaymentMethod = 'card';
 
@@ -153,10 +150,7 @@ export class DonationFormComponent implements OnInit {
       window.scrollTo(0, 0);
     }
   }
-  
-  selectPaymentMethod(method: string): void {
-    this.selectedPaymentMethod = method;
-  }
+    // Rimossa la funzione selectPaymentMethod poiché ora c'è solo un metodo di pagamento
   
   submitDonation(): void {
     this.submitted = true;

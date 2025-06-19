@@ -399,37 +399,21 @@
 }
 
 .payment-options {
-  display: flex;
-  gap: 15px;
   margin-bottom: 25px;
 }
 
 .payment-option {
-  flex: 1;
   padding: 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #ff5a5f;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.payment-option:hover {
-  background-color: #f9f9f9;
-}
-
-.payment-option.selected {
-  border-color: #ff5a5f;
   background-color: rgba(255, 90, 95, 0.05);
+  margin-bottom: 20px;
 }
 
 .payment-icon {
   margin-right: 10px;
-  color: #666;
-}
-
-.payment-option.selected .payment-icon {
   color: #ff5a5f;
 }
 
@@ -444,52 +428,7 @@
   margin-bottom: 0;
 }
 
-.payment-instructions {
-  text-align: center;
-}
-
-.paypal-logo {
-  max-width: 200px;
-  margin: 20px auto;
-}
-
-.paypal-logo img {
-  width: 100%;
-  height: auto;
-}
-
-.bank-details {
-  background-color: white;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
-}
-
-.bank-detail-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.bank-detail-row:last-child {
-  border-bottom: none;
-}
-
-.detail-label {
-  font-weight: 600;
-  color: #444;
-}
-
-.detail-value {
-  color: #666;
-}
-
-.bank-note {
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 15px;
-}
+/* Rimossi gli stili per PayPal e bonifico bancario */
 
 /* Donation Summary */
 .donation-summary {
