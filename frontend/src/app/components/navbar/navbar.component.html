@@ -20,10 +20,10 @@
     </div>
     
     <!-- Mobile Navigation Dropdown -->
-    <div class="mobile-nav">
-      <button class="mobile-dropdown-button" (click)="toggleNavDropdown($event)" [class.active]="isNavDropdownOpen">
+    <div class="mobile-nav">      <button class="mobile-dropdown-button" (click)="toggleNavDropdown($event)" [class.active]="isNavDropdownOpen">
         <i class="fas fa-bars"></i>
-      </button>      <div class="mobile-dropdown-menu" [class.show]="isNavDropdownOpen">
+      </button>
+      <div class="mobile-dropdown-menu" [class.show]="isNavDropdownOpen">
         <a routerLink="/campaigns" class="dropdown-item" routerLinkActive="active" (click)="closeNavDropdown()">Campagne</a>
         <a routerLink="/about" class="dropdown-item" routerLinkActive="active" (click)="closeNavDropdown()">Chi Siamo</a>
         <a routerLink="/contact" class="dropdown-item" routerLinkActive="active" (click)="closeNavDropdown()">Contatti</a>
@@ -41,12 +41,12 @@
       </ng-container>
         <!-- Authenticated user -->
       <ng-container *ngIf="isLoggedIn">
-        <div class="user-dropdown">
-          <button class="user-dropdown-trigger" (click)="toggleDropdown($event)">
+        <div class="user-dropdown">          <button class="user-dropdown-trigger" (click)="toggleDropdown($event)">
             <span class="user-avatar desktop-display">{{ userName.charAt(0) }}</span>
             <span class="user-name desktop-display">{{ userName }}</span>
             <i class="fas fa-user mobile-icon"></i>
-          </button>          <div class="user-dropdown-menu" [class.show]="isDropdownOpen">
+          </button>
+          <div class="user-dropdown-menu" [class.show]="isDropdownOpen">
             <a routerLink="/dashboard" class="dropdown-item" (click)="closeDropdown()">Dashboard Personale</a>
             <a routerLink="/profile" class="dropdown-item" (click)="closeDropdown()">Il Mio Profilo</a>
             

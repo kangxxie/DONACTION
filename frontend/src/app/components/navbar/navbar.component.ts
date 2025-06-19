@@ -46,13 +46,13 @@ export class NavbarComponent implements OnInit, OnDestroy {  isLoggedIn = false;
     logout() {
     this.authService.logout();
   }
-  
-  // Toggle user dropdown menu
+    // Toggle user dropdown menu
   toggleDropdown(event: Event): void {
     event.stopPropagation();
     this.isDropdownOpen = !this.isDropdownOpen;
     
-    if (this.isNavDropdownOpen && this.isDropdownOpen) {
+    // If opening the user dropdown, ensure mobile nav dropdown is closed
+    if (this.isDropdownOpen) {
       this.isNavDropdownOpen = false;
     }
   }
@@ -62,10 +62,11 @@ export class NavbarComponent implements OnInit, OnDestroy {  isLoggedIn = false;
     event.stopPropagation();
     this.isNavDropdownOpen = !this.isNavDropdownOpen;
     
-    if (this.isDropdownOpen && this.isNavDropdownOpen) {
+    // If opening the mobile nav dropdown, ensure user dropdown is closed
+    if (this.isNavDropdownOpen) {
       this.isDropdownOpen = false;
     }
-  }  // Close mobile navigation dropdown
+  }// Close mobile navigation dropdown
   closeNavDropdown(): void {
     this.isNavDropdownOpen = false;
   }
@@ -74,17 +75,33 @@ export class NavbarComponent implements OnInit, OnDestroy {  isLoggedIn = false;
   closeDropdown(): void {
     this.isDropdownOpen = false;
   }
-  
-  // Close dropdowns when clicking outside
-  @HostListener('document:click')
-  onDocumentClick(): void {
-    this.isNavDropdownOpen = false;
-    this.isDropdownOpen = false;
+    // Close dropdowns when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    // Reference to dropdown elements and their triggers
+    const userDropdownMenu = document.querySelector('.user-dropdown-menu') as HTMLElement;
+    const userDropdownTrigger = document.querySelector('.user-dropdown-trigger') as HTMLElement;
+    
+    const navDropdownMenu = document.querySelector('.mobile-dropdown-menu') as HTMLElement;
+    const navDropdownTrigger = document.querySelector('.mobile-dropdown-button') as HTMLElement;
+    
+    // Check if user dropdown is open and click was outside it
+    if (this.isDropdownOpen && userDropdownMenu && userDropdownTrigger) {
+      if (this.isClickOutsideDropdown(event, userDropdownMenu, userDropdownTrigger)) {
+        this.isDropdownOpen = false;
+      }
+    }
+    
+    // Check if nav dropdown is open and click was outside it
+    if (this.isNavDropdownOpen && navDropdownMenu && navDropdownTrigger) {
+      if (this.isClickOutsideDropdown(event, navDropdownMenu, navDropdownTrigger)) {
+        this.isNavDropdownOpen = false;
+      }
+    }
   }
-  
-  // Prevent clicks inside navbar from closing dropdown
-  @HostListener('click', ['$event'])
-  onClick(event: Event): void {
+  // Prevent clicks only inside dropdown menus from closing dropdown
+  preventClose(event: Event): void {
+    // Stop propagation only for clicks inside dropdown menus, not the entire navbar
     event.stopPropagation();
   }
   
@@ -94,5 +111,10 @@ export class NavbarComponent implements OnInit, OnDestroy {  isLoggedIn = false;
     if (isPlatformBrowser(this.platformId) && window.innerWidth > 768) {
       this.isNavDropdownOpen = false;
     }
+  }
+  
+  // Check if click was outside the dropdown and its trigger
+  isClickOutsideDropdown(event: MouseEvent, dropdownElement: HTMLElement, triggerElement: HTMLElement): boolean {
+    return !dropdownElement.contains(event.target as Node) && !triggerElement.contains(event.target as Node);
   }
 }
