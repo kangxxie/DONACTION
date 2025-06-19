@@ -80,12 +80,12 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.loadCampaigns();
   }
-
   loadCampaigns(): void {
     this.loading = true;
     this.campaignService.getAll().subscribe({
       next: (data) => {
-        this.campaigns = data;
+        // Limita a massimo 3 campagne per la home page
+        this.campaigns = data.slice(0, 3);
         this.loading = false;
       },
       error: (error) => {

@@ -201,7 +201,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Contribuisci alla pulizia delle spiagge italiane e alla protezione dell\'ecosistema marino.',
         goal: 15000,
         collected: 8200,
-        imageUrl: 'assets/environment.png',
+        imageUrl: 'assets/environment.jpeg',
         category: 'Ambiente'
       },
       {
@@ -210,7 +210,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Aiuta a fornire pasti caldi e nutrienti ai senzatetto nelle principali città italiane.',
         goal: 30000,
         collected: 21500,
-        imageUrl: 'assets/food.png',
+        imageUrl: 'assets/food.jpg',
         category: 'Fame'
       },
       {
@@ -219,7 +219,7 @@ export class CampaignListComponent implements OnInit {
         description: 'Fornisci assistenza legale, medica e sociale ai rifugiati che arrivano in Italia.',
         goal: 45000,
         collected: 27300,
-        imageUrl: 'assets/refugees.png',
+        imageUrl: 'assets/refugees.jpg',
         category: 'Rifugiati'
       }
     ];
