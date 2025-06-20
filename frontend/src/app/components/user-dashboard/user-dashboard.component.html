@@ -12,13 +12,9 @@
         <div class="avatar-placeholder">
           {{ currentUser?.nome?.substring(0, 1) || 'U' }}
         </div>
-      </div>
-        <div class="tab-navigation">
+      </div>        <div class="tab-navigation">
         <div class="tab-item active">
           <a href="#donations">Le mie donazioni</a>
-        </div>
-        <div class="tab-item">
-          <a href="#settings">Impostazioni</a>
         </div>
         <div class="tab-item logout">
           <a (click)="logout()">Logout</a>

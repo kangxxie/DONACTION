@@ -1,0 +1,180 @@
+<div class="policy-page page-transition-enter">
+  <!-- Header Banner -->
+  <div class="policy-header">
+    <div class="container">
+      <h1 class="page-title">Informazioni Legali</h1>
+      <p class="page-subtitle">Trasparenza e conformità sono i nostri princìpi fondamentali</p>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="tab-navigation">
+    <div class="container">
+      <div class="tabs">        <button 
+          class="tab-btn" 
+          [class.active]="isActive('privacy')" 
+          (click)="setActiveTab('privacy')">
+          Privacy Policy
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="isActive('terms')" 
+          (click)="setActiveTab('terms')">
+          Termini di Servizio
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Container -->
+  <div class="container">
+    <div class="policy-content">
+      <!-- Privacy Policy Tab -->
+      <div class="tab-content" *ngIf="isActive('privacy')">
+        <h2>Privacy Policy</h2>
+        <p class="last-updated">Ultimo aggiornamento: 15 Giugno 2025</p>
+
+        <div class="policy-section">
+          <h3>1. Introduzione</h3>
+          <p>DONACTION ("noi", "nostro", o "la Piattaforma") si impegna a proteggere la tua privacy. Questa Privacy Policy spiega come raccogliamo, utilizziamo, divulghiamo e proteggiamo le tue informazioni quando utilizzi il nostro sito web e i servizi correlati.</p>
+          <p>Ti invitiamo a leggere attentamente questa Privacy Policy per comprendere le nostre pratiche riguardo ai tuoi dati personali.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>2. Informazioni che Raccogliamo</h3>
+          <p>Potremmo raccogliere diversi tipi di informazioni, inclusi:</p>
+          <ul>
+            <li><strong>Informazioni Personali:</strong> Nome, indirizzo email, numero di telefono, indirizzo postale e dettagli di pagamento quando effettui una donazione o ti registri.</li>
+            <li><strong>Informazioni di Utilizzo:</strong> Dati su come interagisci con il nostro sito, preferenze e funzionalità utilizzate.</li>
+            <li><strong>Informazioni sul Dispositivo:</strong> Tipo di dispositivo, sistema operativo, browser e impostazioni di rete.</li>
+          </ul>
+        </div>
+
+        <div class="policy-section">
+          <h3>3. Utilizzo delle Informazioni</h3>
+          <p>Utilizziamo le informazioni raccolte per:</p>
+          <ul>
+            <li>Fornire e migliorare i nostri servizi</li>
+            <li>Processare donazioni e transazioni</li>
+            <li>Comunicare con te riguardo alla tua account, donazioni e aggiornamenti della piattaforma</li>
+            <li>Personalizzare la tua esperienza</li>
+            <li>Condurre analisi e ricerche per migliorare le nostre offerte</li>
+            <li>Proteggere la sicurezza e l'integrità della nostra piattaforma</li>
+          </ul>
+        </div>
+
+        <div class="policy-section">
+          <h3>4. Condivisione delle Informazioni</h3>
+          <p>Potremmo condividere le tue informazioni con:</p>
+          <ul>
+            <li>Organizzazioni benefiche con cui effettui donazioni (solo informazioni necessarie)</li>
+            <li>Fornitori di servizi che ci aiutano a operare la piattaforma</li>
+            <li>Autorità legali quando richiesto dalla legge</li>
+          </ul>
+          <p>Non vendiamo o affittiamo le tue informazioni personali a terzi per scopi di marketing.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>5. I Tuoi Diritti</h3>
+          <p>Hai il diritto di:</p>
+          <ul>
+            <li>Accedere alle tue informazioni personali</li>
+            <li>Correggere informazioni inaccurate</li>
+            <li>Limitare o opporti a determinati trattamenti</li>
+            <li>Richiedere la cancellazione dei tuoi dati (fatte salve le normative applicabili)</li>
+            <li>Ricevere i tuoi dati in un formato strutturato (portabilità dei dati)</li>
+          </ul>
+        </div>
+
+        <div class="policy-section">
+          <h3>6. Sicurezza</h3>
+          <p>Implementiamo misure di sicurezza tecniche e organizzative per proteggere le tue informazioni personali da accessi non autorizzati, perdita o alterazione.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>7. Conservazione dei Dati</h3>
+          <p>Conserviamo i tuoi dati personali solo per il tempo necessario agli scopi indicati in questa Privacy Policy, a meno che un periodo di conservazione più lungo sia richiesto o consentito dalla legge.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>8. Modifiche alla Privacy Policy</h3>
+          <p>Potremmo aggiornare questa Privacy Policy di tanto in tanto. Ti informeremo di eventuali modifiche sostanziali pubblicando la nuova Privacy Policy su questa pagina e notificandoti via email.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>9. Contattaci</h3>
+          <p>Se hai domande su questa Privacy Policy o sulle nostre pratiche relative alla privacy, contattaci all'indirizzo email: <span>privacy&#64;donaction.it</span></p>
+        </div>
+      </div>
+
+      <!-- Terms of Service Tab -->
+      <div class="tab-content" *ngIf="isActive('terms')">
+        <h2>Termini di Servizio</h2>
+        <p class="last-updated">Ultimo aggiornamento: 15 Giugno 2025</p>
+
+        <div class="policy-section">
+          <h3>1. Accettazione dei Termini</h3>
+          <p>Utilizzando il sito web e i servizi di DONACTION, accetti di essere vincolato da questi Termini di Servizio. Se non accetti questi termini, ti preghiamo di non utilizzare la nostra piattaforma.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>2. Descrizione del Servizio</h3>
+          <p>DONACTION è una piattaforma di raccolta fondi che connette donatori con cause e organizzazioni benefiche. Facilitiamo le donazioni ma non siamo responsabili per l'utilizzo finale dei fondi da parte delle organizzazioni benefiche.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>3. Registrazione e Account</h3>
+          <p>Per utilizzare alcune funzionalità della nostra piattaforma, potrebbe essere necessario registrarsi e creare un account. Ti impegni a fornire informazioni accurate e aggiornate durante il processo di registrazione.</p>
+          <p>Sei responsabile del mantenimento della riservatezza del tuo account e password. Accetti di notificarci immediatamente di qualsiasi uso non autorizzato del tuo account.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>4. Donazioni</h3>
+          <p>Quando effettui una donazione:</p>
+          <ul>
+            <li>Garantisci di avere il diritto legale di utilizzare il metodo di pagamento fornito</li>
+            <li>Comprendi che potrebbe essere applicata una piccola commissione per coprire i costi di elaborazione del pagamento</li>
+            <li>Riconosci che le donazioni sono generalmente irrevocabili una volta elaborate</li>
+          </ul>
+        </div>
+
+        <div class="policy-section">
+          <h3>5. Condotta dell'Utente</h3>
+          <p>Ti impegni a non utilizzare la nostra piattaforma per:</p>
+          <ul>
+            <li>Violare leggi o regolamenti</li>
+            <li>Impersonare altre persone</li>
+            <li>Pubblicare contenuti diffamatori, osceni o illegali</li>
+            <li>Tentare di accedere senza autorizzazione a qualsiasi parte del servizio</li>
+            <li>Interferire con il funzionamento della piattaforma</li>
+          </ul>
+        </div>
+
+        <div class="policy-section">
+          <h3>6. Proprietà Intellettuale</h3>
+          <p>Tutti i contenuti presenti sulla piattaforma, inclusi testi, grafica, logo, immagini e software, sono di proprietà di DONACTION o dei suoi licenzianti e sono protetti dalle leggi sulla proprietà intellettuale.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>7. Limitazione di Responsabilità</h3>
+          <p>DONACTION non è responsabile per eventuali danni diretti, indiretti, incidentali o consequenziali derivanti dall'utilizzo o dall'impossibilità di utilizzare i nostri servizi.</p>
+          <p>Non garantiamo che la piattaforma sarà sempre sicura, priva di errori o disponibile in qualsiasi momento.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>8. Modifiche ai Termini</h3>
+          <p>Ci riserviamo il diritto di modificare questi Termini di Servizio in qualsiasi momento. Le modifiche entreranno in vigore immediatamente dopo la pubblicazione sul sito. L'uso continuato della piattaforma dopo tali modifiche costituisce l'accettazione dei nuovi termini.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>9. Legge Applicabile</h3>
+          <p>Questi Termini di Servizio sono regolati dalle leggi italiane. Qualsiasi controversia sarà sottoposta alla giurisdizione esclusiva dei tribunali italiani.</p>
+        </div>
+
+        <div class="policy-section">
+          <h3>10. Contattaci</h3>
+          <p>Se hai domande sui Termini di Servizio, contattaci all'indirizzo: <span>legal&#64;donaction.it</span></p>
+        </div>      </div>
+    </div>
+  </div>
+</div>

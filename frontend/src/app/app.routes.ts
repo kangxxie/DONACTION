@@ -28,6 +28,7 @@ export const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'donate', component: DonationFormComponent },
+  { path: 'privacy-policy', loadComponent: () => import('./components/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent) },
   { path: 'donate/:id', component: DonationFormComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

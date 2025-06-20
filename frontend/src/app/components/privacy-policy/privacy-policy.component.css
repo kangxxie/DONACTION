@@ -1,0 +1,221 @@
+.policy-page {
+  padding-bottom: 60px;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Header Banner */
+.policy-header {
+  background: linear-gradient(135deg, #ff5a5f 0%, #ff424a 100%);
+  color: white;
+  padding: 60px 0;
+  text-align: center;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.policy-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.page-subtitle {
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.tab-btn {
+  padding: 18px 25px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #555;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: #ff5a5f;
+}
+
+.tab-btn.active {
+  color: #ff5a5f;
+  border-bottom-color: #ff5a5f;
+}
+
+/* Policy Content */
+.policy-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  margin-top: 30px;
+  padding: 40px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.tab-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-content h2 {
+  color: #333;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.last-updated {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.policy-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.policy-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.policy-section h3 {
+  color: #444;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.policy-section p {
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.policy-section ul {
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.policy-section li {
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.policy-section strong {
+  font-weight: 600;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2.2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .policy-header {
+    padding: 40px 0;
+  }
+  
+  .tabs {
+    flex-wrap: wrap;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 0.9rem;
+  }
+  
+  .policy-content {
+    padding: 20px;
+  }
+  
+  .tab-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .policy-section h3 {
+    font-size: 1.3rem;
+  }
+}
