@@ -45,9 +45,7 @@
             <span class="user-avatar desktop-display">{{ userName.charAt(0) }}</span>
             <span class="user-name desktop-display">{{ userName }}</span>
             <i class="fas fa-user mobile-icon"></i>
-          </button>
-          <div class="user-dropdown-menu" [class.show]="isDropdownOpen">
-            <a routerLink="/dashboard" class="dropdown-item" (click)="closeDropdown()">Dashboard Personale</a>
+          </button>          <div class="user-dropdown-menu" [class.show]="isDropdownOpen">
             <a routerLink="/profile" class="dropdown-item" (click)="closeDropdown()">Il Mio Profilo</a>
             
             <!-- Admin/Team options -->
@@ -70,10 +68,9 @@
               <span>Logout</span>
             </a>
           </div>
-        </div>
-        
+        </div>        
         <!-- Donate button (only on desktop) -->
-        <a routerLink="/donate" class="donate-btn desktop-display">
+        <a routerLink="/campaigns" class="donate-btn desktop-display">
           <span class="donate-icon">❤</span>
           <span>Dona Ora</span>
         </a>

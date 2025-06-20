@@ -9,13 +9,12 @@ import { AuthService } from '../services/auth.service';
 export class AdminGuard implements CanActivate {
   
   constructor(private authService: AuthService, private router: Router) {}
-  
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.authService.isAdmin) {
+    canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    if (this.authService.isAdmin || this.authService.isTeamMember) {
       return true;
     }
     
-    // Reindirizza alla dashboard o home per utenti non admin
+    // Reindirizza alla dashboard o home per utenti non autorizzati
     this.router.navigate(['/']);
     return false;
   }

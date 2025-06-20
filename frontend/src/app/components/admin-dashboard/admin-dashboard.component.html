@@ -66,11 +66,11 @@
         </div>
       </div>
     </div>
-    
-    <!-- Links rapidi -->
+      <!-- Links rapidi -->
     <div class="quick-links">
       <h2>Gestione amministrativa</h2>
       <div class="links-grid">
+        <!-- Gestione Campagne - visibile a tutti -->
         <a routerLink="/admin/campaigns" class="quick-link">
           <div class="link-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -79,11 +79,13 @@
           </div>
           <div class="link-text">
             <h3>Gestione Campagne</h3>
-            <p>Crea, modifica ed elimina campagne</p>
+            <p *ngIf="authService.isAdmin">Crea, modifica ed elimina campagne</p>
+            <p *ngIf="authService.isTeamMember">Gestisci le tue campagne</p>
           </div>
         </a>
         
-        <a routerLink="/admin/users" class="quick-link">
+        <!-- Gestione Utenti - solo per admin -->
+        <a routerLink="/admin/users" class="quick-link" *ngIf="authService.isAdmin">
           <div class="link-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -96,7 +98,8 @@
           </div>
         </a>
         
-        <a routerLink="/admin/donations" class="quick-link">
+        <!-- Registro Donazioni - solo per admin -->
+        <a routerLink="/admin/donations" class="quick-link" *ngIf="authService.isAdmin">
           <div class="link-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
@@ -109,17 +112,18 @@
             <p>Monitora tutte le transazioni</p>
           </div>
         </a>
-        
-        <a routerLink="/admin/settings" class="quick-link">
+          <!-- Crea Campagna - visibile a tutti -->
+        <a routerLink="/admin/campaigns/new" class="quick-link">
           <div class="link-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
           </div>
           <div class="link-text">
-            <h3>Impostazioni</h3>
-            <p>Configura il sito</p>
+            <h3>Crea Campagna</h3>
+            <p>Avvia una nuova raccolta fondi</p>
           </div>
         </a>
       </div>

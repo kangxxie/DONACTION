@@ -98,17 +98,16 @@ export class HomeComponent implements OnInit {
       }
     });
   }
-
   donate(campaignId: number): void {
   this.authService.currentUser.pipe(take(1)).subscribe(user => {
     if (user) {
-      // Utente autenticato - vai direttamente alla pagina di donazione
-      this.router.navigate(['/donate', campaignId]);
+      // Utente autenticato - vai direttamente alla pagina di donazione specifica per questa campagna
+      this.router.navigate(['/campaign', campaignId]);
     } else {
       // Utente non autenticato - reindirizza al login con parametri per redirect
       this.router.navigate(['/login'], { 
         queryParams: { 
-          redirect: `/donate/${campaignId}`, 
+          redirect: `/campaign/${campaignId}`, 
           campaign: campaignId.toString() 
         } 
       });

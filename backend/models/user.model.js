@@ -3,6 +3,22 @@ const pool = require('../config/db');
 const bcrypt = require('bcrypt');
 
 class User {
+  static async verifyRegistrationCode(code) {
+    const [rows] = await pool.query(
+      'SELECT * FROM registration_codes WHERE code = ? AND is_used = FALSE',
+      [code]
+    );
+    return rows[0];
+  }
+
+  static async markCodeAsUsed(code) {
+    const [result] = await pool.query(
+      'UPDATE registration_codes SET is_used = TRUE WHERE code = ?',
+      [code]
+    );
+    return result.affectedRows > 0;
+  }
+
   static async findByEmail(email) {
     const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
     return rows[0];
@@ -55,6 +71,10 @@ class User {
   static async getAll() {
     const [rows] = await pool.query('SELECT id, name, email, role, created_at FROM users');
     return rows;
+  }
+  
+  static async query(sql, params) {
+    return await pool.query(sql, params);
   }
 }
 

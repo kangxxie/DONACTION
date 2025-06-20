@@ -4,6 +4,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth.routes.js');
 const campaignRoutes = require('./routes/campaign.routes.js');
 const donationRoutes = require('./routes/donation.routes.js');
+const userRoutes = require('./routes/user.routes.js');
+const debugRoutes = require('./test-campaign-debug.js');
 
 // Inizializzazione app
 const app = express();
@@ -24,10 +26,21 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/donations', donationRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/debug', debugRoutes);
 
 // Route base
 app.get('/', (req, res) => {
   res.json({ message: 'Benvenuto nell\'API di DONACTION!' });
+});
+
+// Route di ping per test di connessione
+app.get('/api/ping', (req, res) => {
+  res.json({ 
+    status: 'ok',
+    message: 'API Server is running',
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Gestione errori 404

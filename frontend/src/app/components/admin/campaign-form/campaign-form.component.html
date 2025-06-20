@@ -4,7 +4,10 @@
     <p>{{ isEditing ? 'Modifica i dettagli della campagna esistente' : 'Inserisci i dettagli per la nuova campagna' }}</p>
   </div>
 
-  <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="error-message" *ngIf="errorMessage">
+  <strong>Errore:</strong> {{ errorMessage }}
+  <button *ngIf="errorMessage" (click)="retrySubmit()" class="btn-retry">Riprova</button>
+</div>
   <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
 
   <div class="loading-indicator" *ngIf="loading && isEditing">

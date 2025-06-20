@@ -17,14 +17,14 @@ router.post('/',
   donationController.makeDonation
 );
 
-// Ottieni le donazioni per una campagna (pubblico)
-router.get('/:campaignId', donationController.getDonationsByCampaign);
-
 // Ottieni le donazioni dell'utente corrente (autenticato)
 router.get('/user/my-donations', 
   authMiddleware.authenticateToken, 
   donationController.getUserDonations
 );
+
+// Ottieni le donazioni per una campagna (pubblico)
+router.get('/campaign/:campaignId', donationController.getDonationsByCampaign);
 
 // Ottieni tutte le donazioni (solo admin)
 router.get('/', 

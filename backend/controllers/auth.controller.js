@@ -23,7 +23,8 @@ const generateToken = (userId) => {
 // Registrazione utente
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, admin_code } = req.body;
+    const { nome, email, password, admin_code } = req.body;
+    const name = nome; // Mappatura del campo nome a name
     
     // Verifica se l'utente esiste già
     const existingUser = await User.findByEmail(email);
@@ -33,22 +34,31 @@ exports.register = async (req, res) => {
     
     // Determina il ruolo dell'utente
     let role = 'registered';
-    if (admin_code === process.env.ADMIN_CODE) {
-      role = 'admin';
-    }
+    
+    // Verifica se è stato fornito un codice di registrazione
+    if (admin_code) {
+      // Verifica nella tabella registration_codes
+      const registrationCode = await User.verifyRegistrationCode(admin_code);
+      
+      if (registrationCode) {
+        role = registrationCode.role; // 'admin' o 'team'
+        
+        // Segna il codice come utilizzato
+        await User.markCodeAsUsed(admin_code);
+      } else {
+        return res.status(400).json({ message: 'Codice di registrazione non valido.' });
+      }    }
     
     // Crea nuovo utente
     const newUser = await User.create({ name, email, password, role });
     
     // Genera token JWT
-    const token = generateToken(newUser.id);
-    
-    res.status(201).json({
+    const token = generateToken(newUser.id);    res.status(201).json({
       message: 'Utente registrato con successo.',
       token,
       user: {
         id: newUser.id,
-        name: newUser.name,
+        name: newUser.name, // Assicurarsi che venga restituito il campo name
         email: newUser.email,
         role: newUser.role
       }

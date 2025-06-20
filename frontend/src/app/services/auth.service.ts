@@ -67,9 +67,12 @@ export class AuthService {
   public get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
-  
-  public get isAdmin(): boolean {
+    public get isAdmin(): boolean {
     return this.currentUserValue?.role === 'admin';
+  }
+  
+  public get isTeamMember(): boolean {
+    return this.currentUserValue?.role === 'team_member';
   }
   
   public get isLoggedIn(): boolean {

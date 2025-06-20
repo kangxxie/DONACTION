@@ -62,29 +62,42 @@ exports.updateCampaign = async (req, res) => {
     const { id } = req.params;
     const { title, description, goal, imageUrl, category } = req.body;
     
+    console.log(`Richiesta di aggiornamento per la campagna ${id}:`, req.body);
+    
     // Verifica se la campagna esiste
     const campaign = await Campaign.getById(id);
     if (!campaign) {
+      console.log(`Campagna con ID ${id} non trovata`);
       return res.status(404).json({ message: 'Campagna non trovata.' });
     }
     
+    console.log(`Campagna trovata:`, campaign);
+    console.log(`Utente richiedente:`, req.user);
+    
     // Verifica i permessi: un membro del team può modificare solo le sue campagne, un admin può modificare tutte
     if (req.user.role === 'team' && campaign.created_by !== req.user.id) {
+      console.log(`Accesso negato: l'utente team ${req.user.id} sta cercando di modificare una campagna creata da ${campaign.created_by}`);
       return res.status(403).json({ message: 'Non hai i permessi per modificare questa campagna.' });
     }
     
-    const updated = await Campaign.update(id, {
+    const updateData = {
       title,
       description,
       goal,
       imageUrl,
       category
-    });
+    };
+    
+    console.log(`Dati di aggiornamento:`, updateData);
+    
+    const updated = await Campaign.update(id, updateData);
     
     if (!updated) {
+      console.log(`Aggiornamento fallito per la campagna ${id}`);
       return res.status(500).json({ message: 'Impossibile aggiornare la campagna.' });
     }
     
+    console.log(`Campagna ${id} aggiornata con successo`);
     res.json({ message: 'Campagna aggiornata con successo.' });
   } catch (error) {
     console.error('Errore nell\'aggiornamento della campagna:', error);
@@ -129,5 +142,23 @@ exports.getCampaignsByUser = async (req, res) => {
   } catch (error) {
     console.error('Errore nel recupero delle campagne dell\'utente:', error);
     res.status(500).json({ message: 'Errore durante il recupero delle campagne dell\'utente.' });
+  }
+};
+
+// Ottieni le campagne create da uno specifico utente (per admin o per chi ha creato le campagne)
+exports.getCampaignsByCreator = async (req, res) => {
+  try {
+    const { creatorId } = req.params;
+    
+    // Se non è admin e non è il creatore, non può vedere le campagne
+    if (req.user.role !== 'admin' && req.user.id !== parseInt(creatorId)) {
+      return res.status(403).json({ message: 'Non hai i permessi per visualizzare queste campagne.' });
+    }
+    
+    const campaigns = await Campaign.getByCreatedBy(creatorId);
+    res.json(campaigns);
+  } catch (error) {
+    console.error('Errore nel recupero delle campagne del creatore:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle campagne del creatore.' });
   }
 };

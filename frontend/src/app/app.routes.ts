@@ -35,8 +35,7 @@ export const routes: Routes = [
   { path: 'admin/login', component: AdminLoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password/:token', component: ResetPasswordComponent },
-  
-  // Percorsi per utenti registrati
+    // Percorsi per utenti registrati
   { 
     path: 'profile', 
     component: ProfileComponent, 
@@ -45,9 +44,8 @@ export const routes: Routes = [
   },
   { 
     path: 'dashboard', 
-    component: UserDashboardComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['registered', 'team', 'admin'] }
+    redirectTo: 'campaigns',
+    pathMatch: 'full'
   },
   
   // Percorsi per admin e team

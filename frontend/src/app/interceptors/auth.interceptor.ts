@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
+// Versione classe (per Angular Module)
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
@@ -32,3 +33,37 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 }
+
+// Versione funzionale (per Standalone API)
+import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const token = authService.getToken();
+  
+  // Log per debug
+  console.log(`AuthInterceptor: Intercettata richiesta a ${req.url}`);
+  console.log(`AuthInterceptor: Token presente: ${!!token}`);
+  
+  if (token) {
+    // Clona la richiesta con il token nell'header Authorization
+    console.log(`AuthInterceptor: Aggiunto token all'header Authorization`);
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+  
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      console.error(`AuthInterceptor: Errore HTTP ${error.status} su ${req.url}`, error);
+      if (error.status === 401) {
+        console.log('AuthInterceptor: Errore 401, logout utente');
+        authService.logout();
+      }
+      return throwError(() => error);
+    })
+  );
+};

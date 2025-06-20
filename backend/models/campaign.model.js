@@ -30,14 +30,22 @@ class Campaign {
     );
     return { id: result.insertId, ...campaignData, collected: 0 };
   }
-
   static async update(id, campaignData) {
-    const { title, description, goal, imageUrl, category } = campaignData;
-    const [result] = await pool.query(
-      'UPDATE campaigns SET title = ?, description = ?, goal = ?, imageUrl = ?, category = ? WHERE id = ?',
-      [title, description, goal, imageUrl, category, id]
-    );
-    return result.affectedRows > 0;
+    try {
+      const { title, description, goal, imageUrl, category } = campaignData;
+      console.log(`Aggiornamento campagna ${id} con dati:`, campaignData);
+      
+      const [result] = await pool.query(
+        'UPDATE campaigns SET title = ?, description = ?, goal = ?, imageUrl = ?, category = ? WHERE id = ?',
+        [title, description, goal, imageUrl, category, id]
+      );
+      
+      console.log(`Risultato aggiornamento:`, result);
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error(`Errore nell'aggiornamento della campagna ${id}:`, error);
+      throw error;
+    }
   }
 
   static async delete(id) {
@@ -58,7 +66,5 @@ class Campaign {
     return rows;
   }
 }
-
-module.exports = Campaign;
 
 module.exports = Campaign;

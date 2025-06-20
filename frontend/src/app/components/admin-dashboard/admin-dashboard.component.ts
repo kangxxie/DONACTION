@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AdminService } from '../../services/admin.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -21,7 +22,10 @@ export class AdminDashboardComponent implements OnInit {
     activeCampaigns: []
   };
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    public adminService: AdminService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadDashboardStats();

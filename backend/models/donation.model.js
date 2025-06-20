@@ -24,24 +24,38 @@ class Donation {
     `, [campaignId]);
     return rows;
   }
-
   static async getByUserId(userId) {
     const [rows] = await pool.query(`
-      SELECT d.*, c.title as campaign_title
+      SELECT d.*, 
+             c.title as campaign_title,
+             c.collected as campaign_collected,
+             c.imageUrl as campaign_image,
+             c.category as campaign_category
       FROM donations d
       JOIN campaigns c ON d.campaign_id = c.id
       WHERE d.user_id = ?
       ORDER BY d.donated_at DESC
     `, [userId]);
+    
+    // Log per debug
+    console.log(`Query donazioni per userId ${userId}: trovate ${rows.length} donazioni`);
+    
     return rows;
-  }
-
-  static async create(donationData) {
+  }  static async create(donationData) {
     const { campaign_id, user_id, donor_name, amount, email, payment_method } = donationData;
+    
+    // Validazione dei dati essenziali
+    if (!campaign_id || !amount || amount <= 0) {
+      throw new Error('Dati donazione non validi. Verificare campaign_id e amount.');
+    }
     
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
+      
+      // Log per debug
+      console.log(`Creazione donazione: ${amount}€ per campagna ${campaign_id}` + 
+                 (user_id ? ` da utente ${user_id}` : ` da donatore anonimo (${donor_name || 'senza nome'})`));
       
       // Create donation
       const [result] = await connection.query(
@@ -49,15 +63,52 @@ class Donation {
         [campaign_id, user_id, donor_name, amount, email, payment_method, 'completed']
       );
       
+      console.log(`Donazione inserita con ID ${result.insertId}`);
+      
       // Update campaign collected amount
-      await connection.query(
+      const [updateResult] = await connection.query(
         'UPDATE campaigns SET collected = collected + ? WHERE id = ?',
         [amount, campaign_id]
       );
       
+      // Verifica se l'aggiornamento è andato a buon fine
+      if (updateResult.affectedRows === 0) {
+        // Rollback se la campagna non esiste
+        console.error(`Errore: Campagna con ID ${campaign_id} non trovata`);
+        await connection.rollback();
+        throw new Error(`Campagna con ID ${campaign_id} non trovata.`);
+      }
+      
+      console.log(`Campagna ${campaign_id} aggiornata: collected += ${amount}`);
+      
+      // Leggi i dati aggiornati della campagna
+      const [campaignRows] = await connection.query(
+        'SELECT collected, title FROM campaigns WHERE id = ?',
+        [campaign_id]
+      );
+      
+      if (!campaignRows || campaignRows.length === 0) {
+        console.error(`Errore: Impossibile leggere i dati aggiornati della campagna ${campaign_id}`);
+        await connection.rollback();
+        throw new Error(`Impossibile leggere i dati aggiornati della campagna ${campaign_id}`);
+      }
+      
+      const newCollectedAmount = campaignRows[0].collected;
+      console.log(`Nuovo importo raccolto per campagna ${campaign_id} (${campaignRows[0].title}): ${newCollectedAmount}`);
+      
       await connection.commit();
-      return { id: result.insertId, ...donationData };
+      console.log('Transazione completata con successo');
+      
+      // Restituiamo la donazione con i dati aggiornati della campagna
+      return { 
+        id: result.insertId, 
+        ...donationData,
+        campaign_collected: newCollectedAmount,
+        campaign_title: campaignRows[0].title,
+        donated_at: new Date()
+      };
     } catch (error) {
+      console.error('Errore durante la creazione della donazione:', error);
       await connection.rollback();
       throw error;
     } finally {
@@ -77,7 +128,5 @@ class Donation {
     return rows[0];
   }
 }
-
-module.exports = Donation;
 
 module.exports = Donation;

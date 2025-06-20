@@ -37,4 +37,11 @@ router.get('/user/my-campaigns',
   campaignController.getCampaignsByUser
 );
 
+// Ottieni le campagne create da un utente specifico (solo admin o il creatore stesso)
+router.get('/creator/:creatorId', 
+  authMiddleware.authenticateToken, 
+  authMiddleware.authorizeRoles('team', 'admin'), 
+  campaignController.getCampaignsByCreator
+);
+
 module.exports = router;
