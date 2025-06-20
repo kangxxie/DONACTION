@@ -30,11 +30,17 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit() {
     this.loadDashboardStats();
   }
-
   loadDashboardStats() {
     this.adminService.getDashboardStats().subscribe({
       next: (data) => {
-        this.stats = data;
+        // Assicuriamoci che i valori numerici siano numeri
+        this.stats = {
+          ...data,
+          totalUsers: Number(data.totalUsers) || 0,
+          totalCampaigns: Number(data.totalCampaigns) || 0,
+          totalDonations: Number(data.totalDonations) || 0,
+          totalAmount: Number(data.totalAmount) || 0
+        };
         this.loading = false;
       },
       error: (error) => {

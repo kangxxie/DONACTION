@@ -7,6 +7,9 @@ const authMiddleware = require('../middleware/auth.middleware');
 // Applica il middleware di autenticazione a tutte le routes
 router.use(authMiddleware.authenticateToken);
 
+// Statistiche dashboard
+router.get('/stats/dashboard', adminController.getDashboardStats);
+
 // Gestione utenti
 router.get('/users', adminController.getAllUsers);
 router.get('/users/:id', adminController.getUserDetails);

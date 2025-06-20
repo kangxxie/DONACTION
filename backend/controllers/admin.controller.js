@@ -1,6 +1,7 @@
 // controllers/admin.controller.js
 const User = require('../models/user.model');
 const Donation = require('../models/donation.model');
+const pool = require('../config/db');
 
 // Ottieni tutti gli utenti (solo per admin)
 exports.getAllUsers = async (req, res) => {
@@ -112,5 +113,72 @@ exports.getAllDonations = async (req, res) => {
   } catch (error) {
     console.error('Errore nel recupero delle donazioni:', error);
     res.status(500).json({ message: 'Errore durante il recupero delle donazioni' });
+  }
+};
+
+// Ottieni statistiche dashboard
+exports.getDashboardStats = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin o team member
+    if (req.user.role !== 'admin' && req.user.role !== 'team') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+
+    // 1. Ottieni il numero totale di utenti
+    const [usersResult] = await pool.query(`
+      SELECT COUNT(*) as totalUsers FROM users
+    `);
+    const totalUsers = usersResult[0].totalUsers;
+
+    // 2. Ottieni il numero di campagne attive
+    const [campaignsResult] = await pool.query(`
+      SELECT COUNT(*) as totalCampaigns FROM campaigns
+    `);
+    const totalCampaigns = campaignsResult[0].totalCampaigns;
+
+    // 3. Ottieni il numero totale di donazioni
+    const [donationsResult] = await pool.query(`
+      SELECT COUNT(*) as totalDonations FROM donations
+    `);
+    const totalDonations = donationsResult[0].totalDonations;
+
+    // 4. Ottieni l'importo totale raccolto
+    const [amountResult] = await pool.query(`
+      SELECT COALESCE(SUM(amount), 0) as totalAmount FROM donations WHERE payment_status = 'completed'
+    `);
+    // Assicuriamoci che totalAmount sia un numero
+    const totalAmount = parseFloat(amountResult[0].totalAmount);
+
+    // 5. Ottieni le donazioni più recenti
+    const [recentDonations] = await pool.query(`
+      SELECT d.id, d.amount, d.donated_at, d.payment_status,
+             c.title as campaign_title,
+             COALESCE(u.name, d.donor_name) as donor_name
+      FROM donations d
+      JOIN campaigns c ON d.campaign_id = c.id
+      LEFT JOIN users u ON d.user_id = u.id
+      ORDER BY d.donated_at DESC
+      LIMIT 5
+    `);
+
+    // 6. Ottieni le campagne attive
+    const [activeCampaigns] = await pool.query(`
+      SELECT id, title, goal, collected, category, imageUrl
+      FROM campaigns
+      ORDER BY created_at DESC
+      LIMIT 5
+    `);
+
+    res.json({
+      totalUsers,
+      totalCampaigns,
+      totalDonations,
+      totalAmount,
+      recentDonations,
+      activeCampaigns
+    });
+  } catch (error) {
+    console.error('Errore nel recupero delle statistiche dashboard:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle statistiche dashboard' });
   }
 };
