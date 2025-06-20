@@ -49,10 +49,12 @@ export class AdminDonationsComponent implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  calculateTotalAmount(): void {
-    this.totalAmount = this.filteredDonations.reduce((sum, donation) => sum + donation.amount, 0);
+  }  calculateTotalAmount(): void {
+    this.totalAmount = this.filteredDonations.reduce((sum, donation) => {
+      // Assicuriamoci che amount sia un numero
+      const amount = typeof donation.amount === 'string' ? parseFloat(donation.amount) : donation.amount;
+      return sum + amount;
+    }, 0);
   }
 
   exportCSV(): void {
@@ -90,9 +92,12 @@ export class AdminDonationsComponent implements OnInit {
         donation.donor_name.toLowerCase().includes(query)
       );
     }
-    
-    // Dopo il filtraggio, ricalcola il totale
-    this.totalAmount = result.reduce((sum, donation) => sum + donation.amount, 0);
+      // Dopo il filtraggio, ricalcola il totale
+    this.totalAmount = result.reduce((sum, donation) => {
+      // Assicuriamoci che amount sia un numero
+      const amount = typeof donation.amount === 'string' ? parseFloat(donation.amount) : donation.amount;
+      return sum + amount;
+    }, 0);
     
     return result;
   }

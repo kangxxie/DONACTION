@@ -100,8 +100,14 @@ exports.getAllDonations = async (req, res) => {
     if (req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Accesso non autorizzato' });
     }
+      let donations = await Donation.getAll();
     
-    const donations = await Donation.getAll();
+    // Assicuriamoci che gli importi siano numeri
+    donations = donations.map(donation => ({
+      ...donation,
+      amount: parseFloat(donation.amount)
+    }));
+    
     res.json(donations);
   } catch (error) {
     console.error('Errore nel recupero delle donazioni:', error);
