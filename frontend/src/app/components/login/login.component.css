@@ -154,3 +154,14 @@ input:focus {
   animation: spin 0.8s ease-in-out infinite;
   margin: 0 auto;
 }
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Stile specifico per il bottone in stato di caricamento */
+.btn-login.loading {
+  pointer-events: none;
+  opacity: 0.9;
+}

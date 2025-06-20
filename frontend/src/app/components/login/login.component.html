@@ -31,13 +31,13 @@
           <span *ngIf="loginForm.get('password')?.errors?.['required']">Password richiesta</span>
           <span *ngIf="loginForm.get('password')?.errors?.['minlength']">La password deve avere almeno 6 caratteri</span>
         </div>
-      </div>
-      <!-- Mostra il pulsante solo quando il form è valido -->
+      </div>      <!-- Mostra il pulsante solo quando il form è valido -->
       <div *ngIf="formValid" class="submit-button-container">
       <button 
         type="submit" 
         class="btn-login" 
         [ngClass]="{'loading': loading}"
+        [disabled]="loading"
         >
         <span *ngIf="!loading">Accedi</span>
         <span *ngIf="loading" class="spinner"></span>

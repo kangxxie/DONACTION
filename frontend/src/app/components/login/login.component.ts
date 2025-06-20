@@ -52,15 +52,14 @@ export class LoginComponent implements OnInit {
   get formValid(): boolean {
     return this.loginForm.valid;
   }
-
   onSubmit() {
     if (this.loginForm.invalid) {
       return;
     }
 
     this.isSubmitting = true;
+    this.loading = true; // Manteniamo entrambi i flag sincronizzati
     this.errorMessage = '';
-    this.loading = true;
     this.error = '';
     
     this.authService.login(
@@ -70,13 +69,14 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.router.navigate([this.returnUrl]);
         this.router.navigateByUrl(this.redirectUrl);
-      },
-      error: (error) => {
-        this.errorMessage = error.error?.message || 'Errore di autenticazione';
+      },      error: (error) => {
+        this.errorMessage = error.error?.message || 'Email o password non validi.';
         this.isSubmitting = false;
+        this.loading = false; // Reimpostare anche il flag loading in caso di errore
       },
       complete: () => {
         this.isSubmitting = false;
+        this.loading = false; // Reimpostare anche il flag loading quando completato
       }
     });
   }
