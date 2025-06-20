@@ -56,25 +56,7 @@ export class AdminDonationsComponent implements OnInit {
       return sum + amount;
     }, 0);
   }
-
-  exportCSV(): void {
-    this.adminService.exportDonationsCSV().subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'donazioni.csv';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      },
-      error: (err) => {
-        console.error('Errore nell\'esportazione CSV:', err);
-        alert('Si è verificato un errore nell\'esportazione CSV.');
-      }
-    });
-  }
+  // Il metodo exportCSV è stato rimosso in quanto non più necessario
 
   get filteredDonations(): Donation[] {
     let result = this.donations;

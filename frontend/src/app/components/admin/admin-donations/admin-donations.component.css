@@ -21,25 +21,7 @@
   margin: 0;
 }
 
-.btn-export {
-  background-color: #e74c3c;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn-export:hover {
-  background-color: #d63c2e;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
+/* Stile del bottone per esportare CSV rimosso */
 
 .filter-container {
   display: flex;
