@@ -1,5 +1,6 @@
 // controllers/admin.controller.js
 const User = require('../models/user.model');
+const Donation = require('../models/donation.model');
 
 // Ottieni tutti gli utenti (solo per admin)
 exports.getAllUsers = async (req, res) => {
@@ -89,5 +90,21 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     console.error('Errore nell\'eliminazione dell\'utente:', error);
     res.status(500).json({ message: 'Errore durante l\'eliminazione dell\'utente' });
+  }
+};
+
+// Ottieni tutte le donazioni (solo per admin)
+exports.getAllDonations = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+    
+    const donations = await Donation.getAll();
+    res.json(donations);
+  } catch (error) {
+    console.error('Errore nel recupero delle donazioni:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle donazioni' });
   }
 };

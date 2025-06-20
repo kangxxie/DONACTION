@@ -13,4 +13,7 @@ router.get('/users/:id', adminController.getUserDetails);
 router.put('/users/:id', adminController.updateUser);
 router.delete('/users/:id', adminController.deleteUser);
 
+// Gestione donazioni
+router.get('/donations', adminController.getAllDonations);
+
 module.exports = router;
