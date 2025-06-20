@@ -14,20 +14,14 @@
         <h2>{{ user?.name }}</h2>
         <p class="user-role">{{ user?.role === 'admin' ? 'Amministratore' : 'Utente registrato' }}</p>
       </div>
-      
-      <div class="stats-card">
-        <h3>Le tue statistiche</h3>
-        <div class="stat-item">
-          <div class="stat-label">Donazioni effettuate</div>
-          <div class="stat-value">{{ userStats.totalDonations }}</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">Totale donato</div>
-          <div class="stat-value">€{{ userStats.donationAmount.toFixed(2) }}</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label">Campagne sostenute</div>
-          <div class="stat-value">{{ userStats.campaignsSupported }}</div>
+        <div class="thank-you-card">
+        <div class="heart-icon">❤️</div>
+        <h3>Grazie!</h3>
+        <p class="thank-you-message">Il tuo supporto fa la differenza ogni giorno.</p>
+        <div class="animated-waves">
+          <div class="wave wave-1"></div>
+          <div class="wave wave-2"></div>
+          <div class="wave wave-3"></div>
         </div>
       </div>
     </div>

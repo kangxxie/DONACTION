@@ -21,13 +21,7 @@ export class ProfileComponent implements OnInit {
   passSubmitted = false;
   successMessage = '';
   errorMessage = '';
-  
-  // Statistiche utente
-  userStats: any = {
-    totalDonations: 0,
-    donationAmount: 0,
-    campaignsSupported: 0
-  };
+    // Messaggio di ringraziamento sostituisce le statistiche
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,9 +48,7 @@ export class ProfileComponent implements OnInit {
     }, {
       validators: this.passwordMatchValidator
     });
-    
-    // Carica statistiche utente
-    this.loadUserStats();
+      // Non è più necessario caricare statistiche
   }
 
   get f() { return this.profileForm.controls; }
@@ -74,19 +66,7 @@ export class ProfileComponent implements OnInit {
       return null;
     }
   }
-  
-  loadUserStats() {
-    if (!this.user) return;
-    
-    this.userService.getUserStats(this.user.id).subscribe({
-      next: (stats) => {
-        this.userStats = stats;
-      },
-      error: (err) => {
-        console.error('Errore caricamento statistiche:', err);
-      }
-    });
-  }
+    // Rimosso metodo loadUserStats() poiché non più necessario
 
   updateProfile() {
     this.submitted = true;

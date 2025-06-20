@@ -70,33 +70,114 @@
   font-size: 0.9rem;
 }
 
-.stats-card {
+.thank-you-card {
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.stats-card h3 {
-  font-size: 1.1rem;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
-.stat-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.stat-label {
-  color: #666;
-}
-
-.stat-value {
-  font-weight: 600;
+.thank-you-card h3 {
+  font-size: 1.6rem;
+  margin: 10px 0;
   color: #ff5a5f;
+  animation: pulse 2s infinite;
+}
+
+.thank-you-message {
+  color: #555;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+.heart-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+.animated-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 90, 95, 0.2), transparent);
+  border-radius: 50% 50% 0 0;
+  animation: wave 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.wave-1 {
+  animation-delay: 0s;
+  opacity: 0.7;
+}
+
+.wave-2 {
+  animation-delay: 1s;
+  opacity: 0.5;
+}
+
+.wave-3 {
+  animation-delay: 2s;
+  opacity: 0.3;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.3);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.3);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: scaleX(0.8);
+    height: 20%;
+  }
+  50% {
+    transform: scaleX(1.2);
+    height: 60%;
+  }
+  100% {
+    transform: scaleX(0.8);
+    height: 20%;
+  }
 }
 
 .profile-section {
