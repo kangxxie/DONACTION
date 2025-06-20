@@ -20,13 +20,11 @@ interface Donation {
   templateUrl: './admin-donations.component.html',
   styleUrls: ['./admin-donations.component.css']
 })
-export class AdminDonationsComponent implements OnInit {
-  donations: Donation[] = [];
+export class AdminDonationsComponent implements OnInit {  donations: Donation[] = [];
   loading = true;
   error = '';
   searchQuery = '';
-  statusFilter = 'all';
-  dateFilter = '';
+  dateFilter = ''; // Mantenuto per compatibilità
   totalAmount = 0;
 
   constructor(private adminService: AdminService) {}
@@ -57,21 +55,16 @@ export class AdminDonationsComponent implements OnInit {
     }, 0);
   }
   // Il metodo exportCSV è stato rimosso in quanto non più necessario
-
   get filteredDonations(): Donation[] {
     let result = this.donations;
     
-    // Filtra per stato
-    if (this.statusFilter !== 'all') {
-      result = result.filter(donation => donation.payment_status === this.statusFilter);
-    }
-    
-    // Filtra per query di ricerca
+    // Filtra solo per query di ricerca (filtro per stato rimosso)
     if (this.searchQuery) {
       const query = this.searchQuery.toLowerCase();
       result = result.filter(donation =>
         donation.campaign_title.toLowerCase().includes(query) ||
-        donation.donor_name.toLowerCase().includes(query)
+        donation.donor_name.toLowerCase().includes(query) ||
+        donation.payment_status.toLowerCase().includes(query)
       );
     }
       // Dopo il filtraggio, ricalcola il totale

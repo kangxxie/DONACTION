@@ -202,6 +202,16 @@
   margin-top: 20px;
 }
 
+.search-only {
+  justify-content: center;
+}
+
+.full-width {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 @media (max-width: 992px) {
   .header {
     flex-direction: column;

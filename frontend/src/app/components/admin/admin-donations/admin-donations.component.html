@@ -2,18 +2,9 @@
   <div class="header">
     <h1>Registro Donazioni</h1>
   </div>
-
-  <div class="filter-container">
-    <div class="search-box">
+  <div class="filter-container search-only">
+    <div class="search-box full-width">
       <input type="text" [(ngModel)]="searchQuery" placeholder="Cerca donazioni..." />
-    </div>
-    <div class="status-filter">
-      <select [(ngModel)]="statusFilter">
-        <option value="all">Tutti gli stati</option>
-        <option value="completed">Completate</option>
-        <option value="pending">In attesa</option>
-        <option value="failed">Fallite</option>
-      </select>
     </div>
   </div>
 
