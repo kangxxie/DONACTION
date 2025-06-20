@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth.routes.js');
 const campaignRoutes = require('./routes/campaign.routes.js');
 const donationRoutes = require('./routes/donation.routes.js');
 const userRoutes = require('./routes/user.routes.js');
+const adminRoutes = require('./routes/admin.routes.js');
 const debugRoutes = require('./test-campaign-debug.js');
 
 // Inizializzazione app
@@ -27,6 +28,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/campaigns', campaignRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/debug', debugRoutes);
 
 // Route base
