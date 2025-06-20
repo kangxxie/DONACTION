@@ -182,3 +182,202 @@ exports.getDashboardStats = async (req, res) => {
     res.status(500).json({ message: 'Errore durante il recupero delle statistiche dashboard' });
   }
 };
+
+// Elimina una campagna (solo per admin)
+exports.deleteCampaign = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin o team
+    if (req.user.role !== 'admin' && req.user.role !== 'team') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+    
+    const campaignId = req.params.id;
+    
+    // Verifica che la campagna esista
+    const [campaign] = await pool.query('SELECT * FROM campaigns WHERE id = ?', [campaignId]);
+    if (campaign.length === 0) {
+      return res.status(404).json({ message: 'Campagna non trovata' });
+    }
+    
+    // Se l'utente è un team member, può eliminare solo le campagne che ha creato
+    const createdBy = Number(campaign[0].created_by);
+    const userId = Number(req.user.id);
+    
+    console.log(`Tentativo di eliminazione campagna ${campaignId}:`);
+    console.log(`- Utente: ${userId}, ruolo: ${req.user.role}`);
+    console.log(`- Creatore campagna: ${createdBy}`);
+    
+    if (req.user.role === 'team' && createdBy !== userId) {
+      console.log(`Accesso negato: l'utente team ${userId} sta cercando di eliminare una campagna creata da ${createdBy}`);
+      return res.status(403).json({ message: 'Non hai i permessi per eliminare questa campagna' });
+    }
+    
+    // Esegui l'eliminazione in una transazione
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+      
+      // Prima elimina le donazioni associate
+      console.log(`Eliminazione donazioni per la campagna ${campaignId}...`);
+      await connection.query('DELETE FROM donations WHERE campaign_id = ?', [campaignId]);
+      
+      // Poi elimina la campagna
+      console.log(`Eliminazione campagna ${campaignId}...`);
+      const [result] = await connection.query('DELETE FROM campaigns WHERE id = ?', [campaignId]);
+      
+      await connection.commit();
+      
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: 'Campagna non trovata o già eliminata' });
+      }
+      
+      console.log(`Campagna ${campaignId} eliminata con successo da ${req.user.id} (${req.user.role})`);
+      res.json({ message: 'Campagna eliminata con successo' });
+    } catch (error) {
+      await connection.rollback();
+      console.error('Errore nell\'eliminazione della campagna:', error);
+      res.status(500).json({ message: 'Errore durante l\'eliminazione della campagna' });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error('Errore nell\'eliminazione della campagna:', error);
+    res.status(500).json({ message: 'Errore durante l\'eliminazione della campagna' });
+  }
+};
+
+// Ottieni tutte le campagne (per admin o team)
+exports.getAllCampaigns = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin o team
+    if (req.user.role !== 'admin' && req.user.role !== 'team') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+    
+    let query = `
+      SELECT c.*, u.name as creator_name 
+      FROM campaigns c
+      LEFT JOIN users u ON c.created_by = u.id
+    `;
+    
+    // Se l'utente è un team member, mostra solo le sue campagne
+    if (req.user.role === 'team') {
+      query += ` WHERE c.created_by = ${req.user.id}`;
+    }
+    
+    query += ` ORDER BY c.created_at DESC`;
+    
+    const [campaigns] = await pool.query(query);
+    res.json(campaigns);
+  } catch (error) {
+    console.error('Errore nel recupero delle campagne:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle campagne' });
+  }
+};
+
+// Ottieni dettagli di una campagna specifica (per admin o team)
+exports.getCampaignDetails = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin o team
+    if (req.user.role !== 'admin' && req.user.role !== 'team') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+    
+    const campaignId = req.params.id;
+    
+    const [campaigns] = await pool.query(`
+      SELECT c.*, u.name as creator_name 
+      FROM campaigns c
+      LEFT JOIN users u ON c.created_by = u.id
+      WHERE c.id = ?
+    `, [campaignId]);
+    
+    if (campaigns.length === 0) {
+      return res.status(404).json({ message: 'Campagna non trovata' });
+    }
+    
+    const campaign = campaigns[0];
+    
+    // Se l'utente è un team member, può vedere solo le sue campagne
+    if (req.user.role === 'team' && Number(campaign.created_by) !== Number(req.user.id)) {
+      return res.status(403).json({ message: 'Non hai i permessi per visualizzare questa campagna' });
+    }
+    
+    res.json(campaign);
+  } catch (error) {
+    console.error('Errore nel recupero della campagna:', error);
+    res.status(500).json({ message: 'Errore durante il recupero della campagna' });
+  }
+};
+
+// Crea una nuova campagna (per admin o team)
+exports.createCampaign = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin o team
+    if (req.user.role !== 'admin' && req.user.role !== 'team') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+    
+    const { title, description, goal, imageUrl, category } = req.body;
+    
+    const [result] = await pool.query(
+      'INSERT INTO campaigns (title, description, goal, imageUrl, category, created_by) VALUES (?, ?, ?, ?, ?, ?)',
+      [title, description, goal, imageUrl, category, req.user.id]
+    );
+    
+    res.status(201).json({
+      id: result.insertId,
+      title,
+      description,
+      goal,
+      imageUrl,
+      category,
+      created_by: req.user.id,
+      collected: 0
+    });
+  } catch (error) {
+    console.error('Errore nella creazione della campagna:', error);
+    res.status(500).json({ message: 'Errore durante la creazione della campagna' });
+  }
+};
+
+// Aggiorna una campagna (per admin o team)
+exports.updateCampaign = async (req, res) => {
+  try {
+    // Verifica che l'utente sia un admin o team
+    if (req.user.role !== 'admin' && req.user.role !== 'team') {
+      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    }
+    
+    const campaignId = req.params.id;
+    const { title, description, goal, imageUrl, category } = req.body;
+    
+    // Verifica che la campagna esista
+    const [campaigns] = await pool.query('SELECT * FROM campaigns WHERE id = ?', [campaignId]);
+    if (campaigns.length === 0) {
+      return res.status(404).json({ message: 'Campagna non trovata' });
+    }
+    
+    const campaign = campaigns[0];
+    
+    // Se l'utente è un team member, può aggiornare solo le sue campagne
+    if (req.user.role === 'team' && Number(campaign.created_by) !== Number(req.user.id)) {
+      console.log(`Accesso negato: l'utente team ${req.user.id} sta cercando di modificare una campagna creata da ${campaign.created_by}`);
+      return res.status(403).json({ message: 'Non hai i permessi per modificare questa campagna' });
+    }
+    
+    const [result] = await pool.query(
+      'UPDATE campaigns SET title = ?, description = ?, goal = ?, imageUrl = ?, category = ? WHERE id = ?',
+      [title, description, goal, imageUrl, category, campaignId]
+    );
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Campagna non trovata o nessuna modifica effettuata' });
+    }
+    
+    res.json({ message: 'Campagna aggiornata con successo' });
+  } catch (error) {
+    console.error('Errore nell\'aggiornamento della campagna:', error);
+    res.status(500).json({ message: 'Errore durante l\'aggiornamento della campagna' });
+  }
+};

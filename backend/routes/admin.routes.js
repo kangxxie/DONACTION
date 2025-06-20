@@ -19,4 +19,11 @@ router.delete('/users/:id', adminController.deleteUser);
 // Gestione donazioni
 router.get('/donations', adminController.getAllDonations);
 
+// Gestione campagne
+router.get('/campaigns', adminController.getAllCampaigns);
+router.get('/campaigns/:id', adminController.getCampaignDetails);
+router.post('/campaigns', adminController.createCampaign);
+router.put('/campaigns/:id', adminController.updateCampaign);
+router.delete('/campaigns/:id', adminController.deleteCampaign);
+
 module.exports = router;
