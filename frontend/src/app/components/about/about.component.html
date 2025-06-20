@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="mission-image">
-        <img src="assets/about/mission.jpg" alt="La nostra missione">
+        <img src="assets/about/mission.png" alt="La nostra missione">
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
     <div class="team-grid" @teamAnimation>
       <div class="team-member" *ngFor="let member of teamMembers">
         <div class="member-image">
-          <img [src]="member.image || 'assets/team/default.jpg'" [alt]="member.name">
+          <img [src]="member.image || 'assets/about/team.png'" [alt]="member.name">
         </div>
         <div class="member-info">
           <h3>{{ member.name }}</h3>

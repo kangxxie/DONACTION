@@ -72,25 +72,25 @@ export class AboutComponent implements OnInit {
       name: 'Marco Soffia ',
       position: 'Fondatore & CEO',
       bio: 'Con oltre 15 anni di esperienza nel settore no-profit, Marco ha fondato DONACTION con la visione di rendere la beneficenza più accessibile e trasparente.',
-      image: 'assets/team/marco.jpg'
+      image: 'assets/team/marco.png'
     },
     {
       name: 'Laura Bianchi',
       position: 'Direttrice Operativa',
       bio: 'Laura coordina tutte le operazioni e si assicura che ogni donazione raggiunga efficacemente il suo obiettivo.',
-      image: 'assets/team/laura.jpg'
+      image: 'assets/team/laura.png'
     },
     {
       name: 'Alessandro Verdi',
       position: 'Responsabile Progetti',
       bio: 'Alessandro seleziona e monitora le campagne, garantendo che ogni progetto abbia un impatto reale e misurabile.',
-      image: 'assets/team/alessandro.jpg'
+      image: 'assets/team/alessandro.png'
     },
     {
       name: 'Giulia Marino',
       position: 'Responsabile Marketing',
       bio: 'Giulia sviluppa strategie per aumentare la visibilità dei progetti e coinvolgere nuovi donatori.',
-      image: 'assets/team/giulia.jpg'
+      image: 'assets/team/giulia.png'
     }
   ];
 
