@@ -25,12 +25,12 @@ export class AuthService {
   forgotPassword(email: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email });
   }
-  resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reset-password`, { token, newPassword });
+  resetPassword(token: string, userId: number, newPassword: string, confirmPassword: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/reset-password`, { token, userId, newPassword, confirmPassword });
   }
   verifyResetToken(token: string): Observable<any> {
-  return this.http.get<any>(`${this.apiUrl}/reset-password/verify/${token}`);
-}
+    return this.http.get<any>(`${this.apiUrl}/reset-password/verify/${token}`);
+  }
   
   private apiUrl = `${environment.apiUrl}/auth`;
   private currentUserSubject: BehaviorSubject<User | null>;

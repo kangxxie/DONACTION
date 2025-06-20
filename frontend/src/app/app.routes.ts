@@ -29,12 +29,10 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'donate', component: DonationFormComponent },
   { path: 'privacy-policy', loadComponent: () => import('./components/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent) },
-  { path: 'donate/:id', component: DonationFormComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'donate/:id', component: DonationFormComponent },  { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'admin/login', component: AdminLoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'reset-password/:token', component: ResetPasswordComponent },
     // Percorsi per utenti registrati
   { 
     path: 'profile', 

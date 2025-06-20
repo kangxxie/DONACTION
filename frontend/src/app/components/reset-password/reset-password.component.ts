@@ -83,12 +83,14 @@ export class ResetPasswordComponent implements OnInit {
     
     if (this.resetForm.invalid) {
       return;
-    }
-
-    this.loading = true;
+    }    this.loading = true;
     const newPassword = this.resetForm.controls['password'].value;
+    const confirmPassword = this.resetForm.controls['confirmPassword'].value;
     
-    this.authService.resetPassword(this.token, newPassword).subscribe({
+    // Usa l'id utente dal token (o usa un valore temporaneo)
+    const userId = 0; // Questo valore verrà ignorato poiché usiamo direttamente il token
+    
+    this.authService.resetPassword(this.token, userId, newPassword, confirmPassword).subscribe({
       next: () => {
         this.successMessage = 'Password reimpostata con successo!';
         this.loading = false;

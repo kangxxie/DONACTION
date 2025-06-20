@@ -139,7 +139,7 @@ exports.adminLogin = async (req, res) => {
   }
 };
 
-// Richiesta reset password
+// Richiesta reset password - nuova versione senza email
 exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -150,63 +150,15 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ message: 'Utente non trovato.' });
     }
     
-    // Genera token di reset
+    // Genera token di reset temporaneo
     const resetToken = await PasswordReset.createToken(user.id);
     
-    // Invia email con token
-    const resetUrl = `http://localhost:4200/reset-password/${resetToken}`;
-    
-    const mailOptions = {
-      from: process.env.EMAIL_USER || 'noreply@donaction.it', // Valore di fallback
-      to: user.email,
-      subject: 'Reset Password - DONACTION',
-      html: `
-        <h1>Reset della tua password</h1>
-        <p>Hai richiesto il reset della password. Clicca sul link seguente per reimpostare la password:</p>
-        <a href="${resetUrl}" target="_blank">Reset Password</a>
-        <p>Il link scadrà tra un'ora.</p>
-        <p>Se non hai richiesto il reset della password, ignora questa email.</p>
-      `
-    };
-    
-    // Verifica le credenziali email
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.warn('Configurazione email mancante. Procedendo comunque con il reset password.');
-      // Invece di fallire, restituiamo success e permettiamo il reset anche senza email
-      return res.json({ 
-        message: 'Link per il reset della password generato.',
-        debugInfo: {
-          token: resetToken,
-          resetUrl: resetUrl
-        }
-      });
-    }
-
-    // Prova a inviare l'email
-    try {
-      await new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            console.error('Errore nell\'invio dell\'email:', error);
-            reject(error);
-          } else {
-            resolve(info);
-          }
-        });
-      });
-      
-      res.json({ message: 'Email per il reset della password inviata.' });
-    } catch (emailError) {
-      console.error('Errore nell\'invio dell\'email:', emailError);
-      // Invece di fallire, restituiamo success e permettiamo il reset anche senza email
-      res.json({ 
-        message: 'Link per il reset della password generato.',
-        debugInfo: {
-          token: resetToken,
-          resetUrl: resetUrl
-        }
-      });
-    }
+    // Restituisci all'utente il token e l'ID utente
+    res.json({ 
+      message: 'Email verificata con successo. Procedi con il reset della password.',
+      userId: user.id,
+      token: resetToken 
+    });
   } catch (error) {
     console.error('Errore nella richiesta di reset password:', error);
     res.status(500).json({ message: 'Errore durante la richiesta di reset password.' });
@@ -230,18 +182,29 @@ exports.verifyResetToken = async (req, res) => {
   }
 };
 
-// Reset password
+// Reset password - versione aggiornata
 exports.resetPassword = async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    const { token, userId, newPassword, confirmPassword } = req.body;
     
+    // Verifica che le password corrispondano
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: 'Le password non corrispondono.' });
+    }
+    
+    // Verifica che la password rispetti i requisiti di sicurezza
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: 'La password deve contenere almeno 8 caratteri.' });
+    }
+    
+    // Verifica che il token sia valido e corrisponda all'utente
     const resetRecord = await PasswordReset.findByToken(token);
-    if (!resetRecord) {
-      return res.status(400).json({ message: 'Token di reset non valido o scaduto.' });
+    if (!resetRecord || resetRecord.user_id != userId) {
+      return res.status(400).json({ message: 'Sessione di reset non valida o scaduta.' });
     }
     
     // Aggiorna la password dell'utente
-    await User.updatePassword(resetRecord.user_id, newPassword);
+    await User.updatePassword(userId, newPassword);
     
     // Elimina il token di reset
     await PasswordReset.deleteToken(token);
