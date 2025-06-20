@@ -73,12 +73,16 @@ exports.updateCampaign = async (req, res) => {
     
     console.log(`Campagna trovata:`, campaign);
     console.log(`Utente richiedente:`, req.user);
-    
-    // Verifica i permessi: un membro del team può modificare solo le sue campagne, un admin può modificare tutte
-    if (req.user.role === 'team' && campaign.created_by !== req.user.id) {
+      // Verifica i permessi: un membro del team può modificare solo le sue campagne, un admin può modificare tutte
+    if (req.user.role === 'team' && campaign.created_by != req.user.id) {
       console.log(`Accesso negato: l'utente team ${req.user.id} sta cercando di modificare una campagna creata da ${campaign.created_by}`);
+      console.log(`Tipo di req.user.id: ${typeof(req.user.id)}, Tipo di campaign.created_by: ${typeof(campaign.created_by)}`);
+      console.log(`Valori: req.user.id = ${req.user.id}, campaign.created_by = ${campaign.created_by}`);
       return res.status(403).json({ message: 'Non hai i permessi per modificare questa campagna.' });
     }
+    
+    // Se è un admin, ha pieno controllo
+    console.log(`Permessi verificati: l'utente ${req.user.id} con ruolo ${req.user.role} può modificare la campagna creata da ${campaign.created_by}`);
     
     const updateData = {
       title,
@@ -115,11 +119,16 @@ exports.deleteCampaign = async (req, res) => {
     if (!campaign) {
       return res.status(404).json({ message: 'Campagna non trovata.' });
     }
-    
-    // Verifica i permessi: un membro del team può eliminare solo le sue campagne, un admin può eliminare tutte
-    if (req.user.role === 'team' && campaign.created_by !== req.user.id) {
+      // Verifica i permessi: un membro del team può eliminare solo le sue campagne, un admin può eliminare tutte
+    if (req.user.role === 'team' && campaign.created_by != req.user.id) {
+      console.log(`Accesso negato: l'utente team ${req.user.id} sta cercando di eliminare una campagna creata da ${campaign.created_by}`);
+      console.log(`Tipo di req.user.id: ${typeof(req.user.id)}, Tipo di campaign.created_by: ${typeof(campaign.created_by)}`);
+      console.log(`Valori: req.user.id = ${req.user.id}, campaign.created_by = ${campaign.created_by}`);
       return res.status(403).json({ message: 'Non hai i permessi per eliminare questa campagna.' });
     }
+    
+    // Se è un admin, ha pieno controllo
+    console.log(`Permessi verificati: l'utente ${req.user.id} con ruolo ${req.user.role} può eliminare la campagna creata da ${campaign.created_by}`);
     
     const deleted = await Campaign.delete(id);
     
