@@ -2,6 +2,9 @@
 
 A full-stack web platform for managing donation campaigns with a comprehensive user, team, and admin role system. DONACTION enables users to create, discover, and contribute to charitable campaigns through a modern, secure, and scalable architecture.
 
+![Homepage](images/image.png)
+![Homepage2](images/image1.png)
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -14,7 +17,7 @@ A full-stack web platform for managing donation campaigns with a comprehensive u
 - [Security](#security)
 - [License](#license)
 
-## 🎯 Overview
+## Overview
 
 DONACTION is a donation platform that connects donors with meaningful causes. The application provides:
 
@@ -214,13 +217,20 @@ frontend/src/
 └── assets/                      # Static resources
 ```
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- MySQL (v8 or higher)
-- npm or yarn package manager
+- **Node.js**: v18.19.1 or higher (v20.11.1+ or v22+ recommended)
+  - **Required for both frontend and backend**
+  - Angular 19 requires Node.js >= 18.19.1
+  - Express 5.1.0 and bcrypt 6.0.0 require Node.js >= 18
+  - Check your version: `node --version`
+  - Download from: [nodejs.org](https://nodejs.org/)
+- **MySQL**: v8.0 or higher
+- **npm**: v8.0.0 or higher (comes with Node.js)
+
+> **⚠️ Important**: If you're using Node.js v16 or lower, you will encounter `EBADENGINE` warnings and potential runtime issues. Please upgrade to Node.js v18+ before proceeding with the installation.
 
 ### Installation
 
@@ -299,7 +309,7 @@ frontend/src/
    npm run serve:ssr:frontend
    ```
 
-## 📡 API Documentation
+## API Documentation
 
 ### Base URL
 
